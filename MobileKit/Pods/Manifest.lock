@@ -1,0 +1,28 @@
+PODS:
+  - Cache (4.2.0)
+  - FXKeychain (1.5.3)
+  - ReachabilitySwift (4.3.0)
+  - SwiftyBeaver (1.6.1)
+
+DEPENDENCIES:
+  - Cache (~> 4.1)
+  - FXKeychain (~> 1.5)
+  - ReachabilitySwift (~> 4.3)
+  - SwiftyBeaver (~> 1.4)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Cache
+    - FXKeychain
+    - ReachabilitySwift
+    - SwiftyBeaver
+
+SPEC CHECKSUMS:
+  Cache: f28f8dd64b632155aabf9b3906b036a659048251
+  FXKeychain: 2fe54573946ffef634f4e2a2851e6c8f4ea15e76
+  ReachabilitySwift: 408477d1b6ed9779dba301953171e017c31241f3
+  SwiftyBeaver: ccfcdf85a04d429f1633f668650b0ce8020bda3a
+
+PODFILE CHECKSUM: dc28032794ae4f44148caaa4e1adbc884f2b310c
+
+COCOAPODS: 1.5.3
