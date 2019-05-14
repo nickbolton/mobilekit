@@ -14,7 +14,7 @@ extension UIView {
     return convert(center, to: to)
   }
   
-  // handler returns true if it shouldn't decend into subviews
+  // handler returns true if it shouldn't descend into subviews
   public func walkViewHierarchy(_ handler: (UIView)->Bool) {
     for v in subviews {
       if handler(v) { continue }

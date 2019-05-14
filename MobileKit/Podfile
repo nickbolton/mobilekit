@@ -7,6 +7,8 @@ target 'MobileKit' do
   pod 'SwiftyBeaver', '~> 1.4'
   pod 'ReachabilitySwift', '~> 4.3'
   pod 'FXKeychain', '~> 1.5'
+  pod 'RxSwift', '~> 4.4'
+  pod 'ReSwift', '~> 4.0'
 end
 
 post_install do |installer|

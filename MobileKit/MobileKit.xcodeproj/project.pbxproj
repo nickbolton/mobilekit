@@ -17,6 +17,15 @@
 		92BA9408228491A800649B59 /* AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA9407228491A700649B59 /* AlertView.swift */; };
 		92BA940A228491AF00649B59 /* UIViewController+AlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA9409228491AF00649B59 /* UIViewController+AlertView.swift */; };
 		92BA940C228491F600649B59 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 92BA940B228491F600649B59 /* Assets.xcassets */; };
+		92C6F9E72284BEE70018CEF8 /* BaseCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6F9E62284BEE70018CEF8 /* BaseCollectionViewLayout.swift */; };
+		92C6F9E92284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6F9E82284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift */; };
+		92C6F9EB2284BF100018CEF8 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6F9EA2284BF0F0018CEF8 /* CollectionItem.swift */; };
+		92C6F9ED2284C1320018CEF8 /* BaseCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6F9EC2284C1320018CEF8 /* BaseCollectionCell.swift */; };
+		92C6FA0E2286DDE50018CEF8 /* ObservableOperators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6FA052286DDE50018CEF8 /* ObservableOperators.swift */; };
+		92C6FA0F2286DDE50018CEF8 /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6FA072286DDE50018CEF8 /* OptionalExtensions.swift */; };
+		92C6FA102286DDE50018CEF8 /* StoreSubscriberRxProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6FA0A2286DDE50018CEF8 /* StoreSubscriberRxProxy.swift */; };
+		92C6FA112286DDE50018CEF8 /* StoreSubscriptionExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6FA0B2286DDE50018CEF8 /* StoreSubscriptionExtensions.swift */; };
+		92C6FA162286E0130018CEF8 /* ScopedState.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6FA152286E0130018CEF8 /* ScopedState.swift */; };
 		92DF3FDF2284946500DD132A /* Locker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF3FDE2284946500DD132A /* Locker.swift */; };
 		92DF3FE4228494D700DD132A /* Platform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF3FE0228494D700DD132A /* Platform.swift */; };
 		92DF3FE5228494D700DD132A /* BackgroundTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92DF3FE1228494D700DD132A /* BackgroundTask.swift */; };
@@ -74,6 +83,15 @@
 		92BA9407228491A700649B59 /* AlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AlertView.swift; sourceTree = "<group>"; };
 		92BA9409228491AF00649B59 /* UIViewController+AlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+AlertView.swift"; sourceTree = "<group>"; };
 		92BA940B228491F600649B59 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		92C6F9E62284BEE70018CEF8 /* BaseCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewLayout.swift; sourceTree = "<group>"; };
+		92C6F9E82284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
+		92C6F9EA2284BF0F0018CEF8 /* CollectionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
+		92C6F9EC2284C1320018CEF8 /* BaseCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionCell.swift; sourceTree = "<group>"; };
+		92C6FA052286DDE50018CEF8 /* ObservableOperators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableOperators.swift; sourceTree = "<group>"; };
+		92C6FA072286DDE50018CEF8 /* OptionalExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalExtensions.swift; sourceTree = "<group>"; };
+		92C6FA0A2286DDE50018CEF8 /* StoreSubscriberRxProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreSubscriberRxProxy.swift; sourceTree = "<group>"; };
+		92C6FA0B2286DDE50018CEF8 /* StoreSubscriptionExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreSubscriptionExtensions.swift; sourceTree = "<group>"; };
+		92C6FA152286E0130018CEF8 /* ScopedState.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScopedState.swift; sourceTree = "<group>"; };
 		92DF3FDE2284946500DD132A /* Locker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Locker.swift; sourceTree = "<group>"; };
 		92DF3FE0228494D700DD132A /* Platform.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Platform.swift; sourceTree = "<group>"; };
 		92DF3FE1228494D700DD132A /* BackgroundTask.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BackgroundTask.swift; sourceTree = "<group>"; };
@@ -144,6 +162,52 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		92C6F9E52284BEC50018CEF8 /* Collection View */ = {
+			isa = PBXGroup;
+			children = (
+				92C6F9EA2284BF0F0018CEF8 /* CollectionItem.swift */,
+				92C6F9E62284BEE70018CEF8 /* BaseCollectionViewLayout.swift */,
+				92C6F9E82284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift */,
+				92C6F9EC2284C1320018CEF8 /* BaseCollectionCell.swift */,
+			);
+			path = "Collection View";
+			sourceTree = "<group>";
+		};
+		92C6F9FF2286DD690018CEF8 /* Redux */ = {
+			isa = PBXGroup;
+			children = (
+				92C6FA152286E0130018CEF8 /* ScopedState.swift */,
+				92C6FA082286DDE50018CEF8 /* ReSwiftExtensions */,
+				92C6FA042286DDE50018CEF8 /* RxSwiftExtensions */,
+			);
+			path = Redux;
+			sourceTree = "<group>";
+		};
+		92C6FA042286DDE50018CEF8 /* RxSwiftExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				92C6FA052286DDE50018CEF8 /* ObservableOperators.swift */,
+			);
+			path = RxSwiftExtensions;
+			sourceTree = "<group>";
+		};
+		92C6FA082286DDE50018CEF8 /* ReSwiftExtensions */ = {
+			isa = PBXGroup;
+			children = (
+				92C6FA092286DDE50018CEF8 /* RxSwift */,
+			);
+			path = ReSwiftExtensions;
+			sourceTree = "<group>";
+		};
+		92C6FA092286DDE50018CEF8 /* RxSwift */ = {
+			isa = PBXGroup;
+			children = (
+				92C6FA0A2286DDE50018CEF8 /* StoreSubscriberRxProxy.swift */,
+				92C6FA0B2286DDE50018CEF8 /* StoreSubscriptionExtensions.swift */,
+			);
+			path = RxSwift;
+			sourceTree = "<group>";
+		};
 		92FF2B4A2282CB08001A02A9 = {
 			isa = PBXGroup;
 			children = (
@@ -179,6 +243,7 @@
 				92FF2FAD2282CFB4001A02A9 /* Core */,
 				92FF2FB62282D2C8001A02A9 /* Animator */,
 				92FF2F922282CCDA001A02A9 /* Text */,
+				92C6F9FF2286DD690018CEF8 /* Redux */,
 			);
 			name = Source;
 			path = ../Source;
@@ -245,6 +310,7 @@
 				92BA93E92282FFAE00649B59 /* UIButton+Layout.swift */,
 				92BA9409228491AF00649B59 /* UIViewController+AlertView.swift */,
 				92BA93ED2283003D00649B59 /* UIViewController+Helpers.swift */,
+				92C6FA072286DDE50018CEF8 /* OptionalExtensions.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -269,6 +335,7 @@
 			isa = PBXGroup;
 			children = (
 				92FF2B622282CB19001A02A9 /* Views */,
+				92C6F9E52284BEC50018CEF8 /* Collection View */,
 				92FF2B792282CBA6001A02A9 /* Extensions */,
 				92FF2B602282CB19001A02A9 /* Utils */,
 			);
@@ -405,11 +472,14 @@
 				92FF2FA02282CCDA001A02A9 /* TextStyle.swift in Sources */,
 				92FF2FC02282D2C8001A02A9 /* UIViewPropertyAnimator+Utils.swift in Sources */,
 				92FF2FCC2282D720001A02A9 /* Interpolate.swift in Sources */,
+				92C6FA162286E0130018CEF8 /* ScopedState.swift in Sources */,
 				92FF2FBC2282D2C8001A02A9 /* AnimatorTransitionManager.swift in Sources */,
 				92FF2FA82282CE34001A02A9 /* Geometry.swift in Sources */,
 				92BA93FA228306B700649B59 /* FileManager+Utils.swift in Sources */,
 				92BA93EE2283003D00649B59 /* UIViewController+Helpers.swift in Sources */,
 				92FF2FCA2282D564001A02A9 /* NSAttributedString+Utils.swift in Sources */,
+				92C6FA112286DDE50018CEF8 /* StoreSubscriptionExtensions.swift in Sources */,
+				92C6FA102286DDE50018CEF8 /* StoreSubscriberRxProxy.swift in Sources */,
 				92FF2FB32282CFFD001A02A9 /* Localize.swift in Sources */,
 				92FF2F9F2282CCDA001A02A9 /* TextStyleManager.swift in Sources */,
 				92FF2FBE2282D2C8001A02A9 /* Easing.swift in Sources */,
@@ -434,21 +504,27 @@
 				92BA93EA2282FFAE00649B59 /* UIButton+Layout.swift in Sources */,
 				92BA9408228491A800649B59 /* AlertView.swift in Sources */,
 				92BA93FC228306CB00649B59 /* UIImage+Utils.swift in Sources */,
+				92C6FA0E2286DDE50018CEF8 /* ObservableOperators.swift in Sources */,
 				92FF2B782282CB91001A02A9 /* Types.swift in Sources */,
 				92FF2FAC2282CF5C001A02A9 /* UIView+Layout.swift in Sources */,
 				92FF2B742282CB19001A02A9 /* NiblessViewController.swift in Sources */,
 				92FF2FA22282CCDA001A02A9 /* StyledLabel.swift in Sources */,
 				92DF3FE7228494D700DD132A /* DispatchTaskPerformer.swift in Sources */,
+				92C6F9E72284BEE70018CEF8 /* BaseCollectionViewLayout.swift in Sources */,
 				92DF3FE4228494D700DD132A /* Platform.swift in Sources */,
 				92FF2B7B2282CBB5001A02A9 /* DispatchQueue+Utils.swift in Sources */,
 				92FF2B7F2282CC0A001A02A9 /* Int+Utils.swift in Sources */,
 				92FF2FAA2282CEF7001A02A9 /* NiblessLabel.swift in Sources */,
 				92FF2FC42282D39D001A02A9 /* View+Animation.swift in Sources */,
 				92FF2B722282CB19001A02A9 /* NiblessTableView.swift in Sources */,
+				92C6F9EB2284BF100018CEF8 /* CollectionItem.swift in Sources */,
 				92FF2B6D2282CB19001A02A9 /* InteractionGuard.swift in Sources */,
 				92FF2FDB2282DD34001A02A9 /* UIButton+Design.swift in Sources */,
 				92FF2FA12282CCDA001A02A9 /* UIFont+Utils.swift in Sources */,
 				92FF2FC62282D3CB001A02A9 /* UIView+Utils.swift in Sources */,
+				92C6F9E92284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift in Sources */,
+				92C6F9ED2284C1320018CEF8 /* BaseCollectionCell.swift in Sources */,
+				92C6FA0F2286DDE50018CEF8 /* OptionalExtensions.swift in Sources */,
 				92FF2F9E2282CCDA001A02A9 /* TextAttributes.swift in Sources */,
 				92FF2FCF2282D87E001A02A9 /* String+Utils.swift in Sources */,
 				92FF2FA32282CCDA001A02A9 /* TextMetricsCache.swift in Sources */,

@@ -151,6 +151,38 @@ public extension UIButton {
   }
   
   @discardableResult
+  func alignImageTop(toBottomOf:UIView, height:CGFloat, offset:CGFloat = 0.0) -> NSLayoutConstraint {
+    self.translatesAutoresizingMaskIntoConstraints = false
+    let imageHeight = image(for: .normal)?.size.height ?? 0.0
+    let constant = offset - ((height - imageHeight) / 2.0)
+    let result = NSLayoutConstraint(item: self,
+                                    attribute: .top,
+                                    relatedBy: .equal,
+                                    toItem: toBottomOf,
+                                    attribute: .bottom,
+                                    multiplier: 1.0,
+                                    constant: constant)
+    NSLayoutConstraint.activate([result])
+    return result
+  }
+  
+  @discardableResult
+  func alignImageTop(toBaselineOf:UIView, height:CGFloat, offset:CGFloat = 0.0) -> NSLayoutConstraint {
+    self.translatesAutoresizingMaskIntoConstraints = false
+    let imageHeight = image(for: .normal)?.size.height ?? 0.0
+    let constant = offset - ((height - imageHeight) / 2.0)
+    let result = NSLayoutConstraint(item: self,
+                                    attribute: .top,
+                                    relatedBy: .equal,
+                                    toItem: toBaselineOf,
+                                    attribute: .lastBaseline,
+                                    multiplier: 1.0,
+                                    constant: constant)
+    NSLayoutConstraint.activate([result])
+    return result
+  }
+
+  @discardableResult
   func alignImageBottom(height:CGFloat, offset:CGFloat = 0.0) -> NSLayoutConstraint {
     self.translatesAutoresizingMaskIntoConstraints = false
     let imageHeight = image(for: .normal)?.size.height ?? 0.0

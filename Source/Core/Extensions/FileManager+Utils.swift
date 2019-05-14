@@ -8,13 +8,17 @@
 import Foundation
 
 extension FileManager {
-    static public var documentsDirectory: String {
-        var paths = NSSearchPathForDirectoriesInDomains(.documentDirectory, .userDomainMask, true) as [String]
-        return paths[0]
+  static public var documentsDirectory: URL {
+    guard let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first else {
+      fatalError("unable to get system docs directory - serious problems")
     }
-    
-    static public var cachesDirectory: String {
-        var paths = NSSearchPathForDirectoriesInDomains(.cachesDirectory, .userDomainMask, true) as [String]
-        return paths[0]
+    return documentsURL
+  }
+  
+  static public var cachesDirectory: URL {
+    guard let cacheURL = FileManager.default.urls(for: .cachesDirectory, in: .userDomainMask).first else {
+      fatalError("unable to get system cache directory - serious problems")
     }
+    return cacheURL
+  }
 }

@@ -35,4 +35,12 @@ Pod::Spec.new do |s|
     s.dependency 'Cache', '~> 4.1'
     s.exclude_files = '**/Info*.plist'
   end
+
+  s.subspec 'Redux' do |s|
+    s.source_files = 'Source/Redux/**/*.{swift,m,h}'
+    s.dependency 'MobileKit/Core'
+    s.dependency 'RxSwift', '~> 4.4'
+    s.dependency 'ReSwift', '~> 4.0'
+    s.exclude_files = '**/Info*.plist'
+  end
 end
