@@ -33,11 +33,13 @@ open class BaseCollectionViewLayout: UICollectionViewLayout {
     _commonInit()
   }
   
+  @available(*, unavailable,
+  message: "Loading this view from a nib is unsupported in favor of initializer dependency injection."
+  )
   public required init?(coder aDecoder: NSCoder) {
-    super.init(coder: aDecoder)
-    _commonInit()
+    fatalError("Loading this view from a nib is unsupported in favor of initializer dependency injection.")
   }
-  
+
   private func _commonInit() {
     let screenBounds = UIScreen.main.bounds
     let orientation = UIDevice.current.orientation

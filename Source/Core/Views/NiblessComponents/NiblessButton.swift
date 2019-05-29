@@ -33,8 +33,12 @@ open class NiblessButton: UIButton, InternalThemeable {
     activateConstraints()
     applyTheme()
     isHierarchyReady = true
+    didFinishInitialization()
   }
   
+  open func didFinishInitialization() {
+  }
+
   open func constructHierarchy() {
   }
   

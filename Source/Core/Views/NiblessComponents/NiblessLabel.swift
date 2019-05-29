@@ -33,8 +33,12 @@ open class NiblessLabel: UILabel, InternalThemeable {
     activateConstraints()
     applyTheme()
     isHierarchyReady = true
+    didFinishInitialization()
   }
   
+  open func didFinishInitialization() {
+  }
+
   open func constructHierarchy() {
   }
   

@@ -32,8 +32,7 @@ public protocol Themeable: class {
   func applyTheme()
 }
 
-protocol InternalThemeable: class {
-  func applyTheme()
+protocol InternalThemeable: Themeable {
 }
 
 open class NiblessView: UIView, InternalThemeable {
@@ -61,8 +60,12 @@ open class NiblessView: UIView, InternalThemeable {
     activateConstraints()
     applyTheme()
     isHierarchyReady = true
+    didFinishInitialization()
   }
   
+  open func didFinishInitialization() {
+  }
+
   open func constructHierarchy() {
   }
   

@@ -8,6 +8,13 @@
 
 /* Begin PBXBuildFile section */
 		2B7E46362C0BDC914961530D /* Pods_MobileKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E268625C70051BC2A34BEE7C /* Pods_MobileKit.framework */; };
+		92824F92229BE341008B76A8 /* RetryingOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824F8D229BE341008B76A8 /* RetryingOperation.swift */; };
+		92824F93229BE341008B76A8 /* OperationsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824F8E229BE341008B76A8 /* OperationsManager.swift */; };
+		92824F94229BE341008B76A8 /* OperationGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824F8F229BE341008B76A8 /* OperationGroup.swift */; };
+		92824F95229BE341008B76A8 /* BaseOperation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824F90229BE341008B76A8 /* BaseOperation.swift */; };
+		92824F96229BE341008B76A8 /* SerialOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824F91229BE341008B76A8 /* SerialOperationQueue.swift */; };
+		92824FA7229BE59A008B76A8 /* GloballyCachingCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824FA6229BE59A008B76A8 /* GloballyCachingCollectionViewLayout.swift */; };
+		92824FAA229BF13D008B76A8 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824FA9229BF13D008B76A8 /* ThemeManager.swift */; };
 		92BA93EA2282FFAE00649B59 /* UIButton+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA93E92282FFAE00649B59 /* UIButton+Layout.swift */; };
 		92BA93EC2283002E00649B59 /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA93EB2283002E00649B59 /* UIView+Helpers.swift */; };
 		92BA93EE2283003D00649B59 /* UIViewController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA93ED2283003D00649B59 /* UIViewController+Helpers.swift */; };
@@ -74,6 +81,13 @@
 
 /* Begin PBXFileReference section */
 		1CD9C0EFBD8AFC5A7792002D /* Pods-MobileKit.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MobileKit.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MobileKit/Pods-MobileKit.debug.xcconfig"; sourceTree = "<group>"; };
+		92824F8D229BE341008B76A8 /* RetryingOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RetryingOperation.swift; sourceTree = "<group>"; };
+		92824F8E229BE341008B76A8 /* OperationsManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationsManager.swift; sourceTree = "<group>"; };
+		92824F8F229BE341008B76A8 /* OperationGroup.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OperationGroup.swift; sourceTree = "<group>"; };
+		92824F90229BE341008B76A8 /* BaseOperation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseOperation.swift; sourceTree = "<group>"; };
+		92824F91229BE341008B76A8 /* SerialOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerialOperationQueue.swift; sourceTree = "<group>"; };
+		92824FA6229BE59A008B76A8 /* GloballyCachingCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GloballyCachingCollectionViewLayout.swift; sourceTree = "<group>"; };
+		92824FA9229BF13D008B76A8 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
 		92BA93E92282FFAE00649B59 /* UIButton+Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Layout.swift"; sourceTree = "<group>"; };
 		92BA93EB2283002E00649B59 /* UIView+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
 		92BA93ED2283003D00649B59 /* UIViewController+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Helpers.swift"; sourceTree = "<group>"; };
@@ -162,6 +176,26 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		92824F8C229BE323008B76A8 /* Operations */ = {
+			isa = PBXGroup;
+			children = (
+				92824F90229BE341008B76A8 /* BaseOperation.swift */,
+				92824F8F229BE341008B76A8 /* OperationGroup.swift */,
+				92824F8E229BE341008B76A8 /* OperationsManager.swift */,
+				92824F8D229BE341008B76A8 /* RetryingOperation.swift */,
+				92824F91229BE341008B76A8 /* SerialOperationQueue.swift */,
+			);
+			path = Operations;
+			sourceTree = "<group>";
+		};
+		92824FA8229BF123008B76A8 /* Theme */ = {
+			isa = PBXGroup;
+			children = (
+				92824FA9229BF13D008B76A8 /* ThemeManager.swift */,
+			);
+			path = Theme;
+			sourceTree = "<group>";
+		};
 		92C6F9E52284BEC50018CEF8 /* Collection View */ = {
 			isa = PBXGroup;
 			children = (
@@ -169,6 +203,7 @@
 				92C6F9E62284BEE70018CEF8 /* BaseCollectionViewLayout.swift */,
 				92C6F9E82284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift */,
 				92C6F9EC2284C1320018CEF8 /* BaseCollectionCell.swift */,
+				92824FA6229BE59A008B76A8 /* GloballyCachingCollectionViewLayout.swift */,
 			);
 			path = "Collection View";
 			sourceTree = "<group>";
@@ -336,6 +371,8 @@
 			children = (
 				92FF2B622282CB19001A02A9 /* Views */,
 				92C6F9E52284BEC50018CEF8 /* Collection View */,
+				92824FA8229BF123008B76A8 /* Theme */,
+				92824F8C229BE323008B76A8 /* Operations */,
 				92FF2B792282CBA6001A02A9 /* Extensions */,
 				92FF2B602282CB19001A02A9 /* Utils */,
 			);
@@ -472,6 +509,7 @@
 				92FF2FA02282CCDA001A02A9 /* TextStyle.swift in Sources */,
 				92FF2FC02282D2C8001A02A9 /* UIViewPropertyAnimator+Utils.swift in Sources */,
 				92FF2FCC2282D720001A02A9 /* Interpolate.swift in Sources */,
+				92824FAA229BF13D008B76A8 /* ThemeManager.swift in Sources */,
 				92C6FA162286E0130018CEF8 /* ScopedState.swift in Sources */,
 				92FF2FBC2282D2C8001A02A9 /* AnimatorTransitionManager.swift in Sources */,
 				92FF2FA82282CE34001A02A9 /* Geometry.swift in Sources */,
@@ -491,10 +529,12 @@
 				92FF2B732282CB19001A02A9 /* NiblessNavigationController.swift in Sources */,
 				92DF3FEB2284956A00DD132A /* Bootstrap.swift in Sources */,
 				92FF2FB02282CFE5001A02A9 /* Logger.swift in Sources */,
+				92824FA7229BE59A008B76A8 /* GloballyCachingCollectionViewLayout.swift in Sources */,
 				92FF2F9C2282CCDA001A02A9 /* TextDescriptor.swift in Sources */,
 				92BA940622848B5600649B59 /* LoaderView.swift in Sources */,
 				92DF3FEA2284956A00DD132A /* Wireframe.swift in Sources */,
 				92DF3FE5228494D700DD132A /* BackgroundTask.swift in Sources */,
+				92824F95229BE341008B76A8 /* BaseOperation.swift in Sources */,
 				92FF2FC22282D357001A02A9 /* Math.swift in Sources */,
 				92FF2FD42282D9E5001A02A9 /* NiblessButton.swift in Sources */,
 				92FF2FBD2282D2C8001A02A9 /* Animator.swift in Sources */,
@@ -505,9 +545,11 @@
 				92BA9408228491A800649B59 /* AlertView.swift in Sources */,
 				92BA93FC228306CB00649B59 /* UIImage+Utils.swift in Sources */,
 				92C6FA0E2286DDE50018CEF8 /* ObservableOperators.swift in Sources */,
+				92824F94229BE341008B76A8 /* OperationGroup.swift in Sources */,
 				92FF2B782282CB91001A02A9 /* Types.swift in Sources */,
 				92FF2FAC2282CF5C001A02A9 /* UIView+Layout.swift in Sources */,
 				92FF2B742282CB19001A02A9 /* NiblessViewController.swift in Sources */,
+				92824F93229BE341008B76A8 /* OperationsManager.swift in Sources */,
 				92FF2FA22282CCDA001A02A9 /* StyledLabel.swift in Sources */,
 				92DF3FE7228494D700DD132A /* DispatchTaskPerformer.swift in Sources */,
 				92C6F9E72284BEE70018CEF8 /* BaseCollectionViewLayout.swift in Sources */,
@@ -516,12 +558,14 @@
 				92FF2B7F2282CC0A001A02A9 /* Int+Utils.swift in Sources */,
 				92FF2FAA2282CEF7001A02A9 /* NiblessLabel.swift in Sources */,
 				92FF2FC42282D39D001A02A9 /* View+Animation.swift in Sources */,
+				92824F92229BE341008B76A8 /* RetryingOperation.swift in Sources */,
 				92FF2B722282CB19001A02A9 /* NiblessTableView.swift in Sources */,
 				92C6F9EB2284BF100018CEF8 /* CollectionItem.swift in Sources */,
 				92FF2B6D2282CB19001A02A9 /* InteractionGuard.swift in Sources */,
 				92FF2FDB2282DD34001A02A9 /* UIButton+Design.swift in Sources */,
 				92FF2FA12282CCDA001A02A9 /* UIFont+Utils.swift in Sources */,
 				92FF2FC62282D3CB001A02A9 /* UIView+Utils.swift in Sources */,
+				92824F96229BE341008B76A8 /* SerialOperationQueue.swift in Sources */,
 				92C6F9E92284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift in Sources */,
 				92C6F9ED2284C1320018CEF8 /* BaseCollectionCell.swift in Sources */,
 				92C6FA0F2286DDE50018CEF8 /* OptionalExtensions.swift in Sources */,
