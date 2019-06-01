@@ -11,13 +11,34 @@ import UIKit
 public protocol CollectionDataSourceProvider: class {
   func collectionItem(at indexPath: IndexPath) -> CollectionItem?
   var dataSource: [[CollectionItem]]? { get }
+  func dataSourceArray(at section: Int) -> [CollectionItem]?
+}
+
+public extension CollectionDataSourceProvider {
+  func dataSourceArray(at section: Int) -> [CollectionItem]? {
+    guard let dataSource = self.dataSource else { return nil }
+    var result: [CollectionItem]? = nil;
+    if section < dataSource.count {
+      result = dataSource[section]
+    }
+    return result
+  }
+  
+  func collectionItem(at indexPath: IndexPath) -> CollectionItem? {
+    if let sectionArray = dataSourceArray(at: indexPath.section) {
+      if indexPath.row >= 0 && indexPath.row < sectionArray.count {
+        return sectionArray[indexPath.row]
+      }
+    }
+    return nil
+  }
 }
 
 open class BaseCollectionViewLayout: UICollectionViewLayout {
   
-  let collectionViewCellKind = "collectionViewCellKind"
-  let collectionViewSupplimentaryKind = "collectionViewSupplimentaryKind"
-  let collectionViewDecorationKind = "collectionViewDecorationKind"
+  public let collectionViewCellKind = "collectionViewCellKind"
+  public let collectionViewSupplimentaryKind = "collectionViewSupplimentaryKind"
+  public let collectionViewDecorationKind = "collectionViewDecorationKind"
   
   public weak var viewController: UIViewController?
   public var minContentSize: CGSize = .zero

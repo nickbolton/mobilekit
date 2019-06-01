@@ -15,6 +15,7 @@
 		92824F96229BE341008B76A8 /* SerialOperationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824F91229BE341008B76A8 /* SerialOperationQueue.swift */; };
 		92824FA7229BE59A008B76A8 /* GloballyCachingCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824FA6229BE59A008B76A8 /* GloballyCachingCollectionViewLayout.swift */; };
 		92824FAA229BF13D008B76A8 /* ThemeManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824FA9229BF13D008B76A8 /* ThemeManager.swift */; };
+		92824FBB22A29E89008B76A8 /* NiblessCollectionReusableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92824FBA22A29E89008B76A8 /* NiblessCollectionReusableView.swift */; };
 		92BA93EA2282FFAE00649B59 /* UIButton+Layout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA93E92282FFAE00649B59 /* UIButton+Layout.swift */; };
 		92BA93EC2283002E00649B59 /* UIView+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA93EB2283002E00649B59 /* UIView+Helpers.swift */; };
 		92BA93EE2283003D00649B59 /* UIViewController+Helpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92BA93ED2283003D00649B59 /* UIViewController+Helpers.swift */; };
@@ -27,7 +28,7 @@
 		92C6F9E72284BEE70018CEF8 /* BaseCollectionViewLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6F9E62284BEE70018CEF8 /* BaseCollectionViewLayout.swift */; };
 		92C6F9E92284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6F9E82284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift */; };
 		92C6F9EB2284BF100018CEF8 /* CollectionItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6F9EA2284BF0F0018CEF8 /* CollectionItem.swift */; };
-		92C6F9ED2284C1320018CEF8 /* BaseCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6F9EC2284C1320018CEF8 /* BaseCollectionCell.swift */; };
+		92C6F9ED2284C1320018CEF8 /* NiblessCollectionCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6F9EC2284C1320018CEF8 /* NiblessCollectionCell.swift */; };
 		92C6FA0E2286DDE50018CEF8 /* ObservableOperators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6FA052286DDE50018CEF8 /* ObservableOperators.swift */; };
 		92C6FA0F2286DDE50018CEF8 /* OptionalExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6FA072286DDE50018CEF8 /* OptionalExtensions.swift */; };
 		92C6FA102286DDE50018CEF8 /* StoreSubscriberRxProxy.swift in Sources */ = {isa = PBXBuildFile; fileRef = 92C6FA0A2286DDE50018CEF8 /* StoreSubscriberRxProxy.swift */; };
@@ -88,6 +89,7 @@
 		92824F91229BE341008B76A8 /* SerialOperationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SerialOperationQueue.swift; sourceTree = "<group>"; };
 		92824FA6229BE59A008B76A8 /* GloballyCachingCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GloballyCachingCollectionViewLayout.swift; sourceTree = "<group>"; };
 		92824FA9229BF13D008B76A8 /* ThemeManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ThemeManager.swift; sourceTree = "<group>"; };
+		92824FBA22A29E89008B76A8 /* NiblessCollectionReusableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiblessCollectionReusableView.swift; sourceTree = "<group>"; };
 		92BA93E92282FFAE00649B59 /* UIButton+Layout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIButton+Layout.swift"; sourceTree = "<group>"; };
 		92BA93EB2283002E00649B59 /* UIView+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Helpers.swift"; sourceTree = "<group>"; };
 		92BA93ED2283003D00649B59 /* UIViewController+Helpers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Helpers.swift"; sourceTree = "<group>"; };
@@ -100,7 +102,7 @@
 		92C6F9E62284BEE70018CEF8 /* BaseCollectionViewLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BaseCollectionViewLayout.swift; sourceTree = "<group>"; };
 		92C6F9E82284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PagingCollectionViewFlowLayout.swift; sourceTree = "<group>"; };
 		92C6F9EA2284BF0F0018CEF8 /* CollectionItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CollectionItem.swift; sourceTree = "<group>"; };
-		92C6F9EC2284C1320018CEF8 /* BaseCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseCollectionCell.swift; sourceTree = "<group>"; };
+		92C6F9EC2284C1320018CEF8 /* NiblessCollectionCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NiblessCollectionCell.swift; sourceTree = "<group>"; };
 		92C6FA052286DDE50018CEF8 /* ObservableOperators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ObservableOperators.swift; sourceTree = "<group>"; };
 		92C6FA072286DDE50018CEF8 /* OptionalExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OptionalExtensions.swift; sourceTree = "<group>"; };
 		92C6FA0A2286DDE50018CEF8 /* StoreSubscriberRxProxy.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StoreSubscriberRxProxy.swift; sourceTree = "<group>"; };
@@ -202,7 +204,6 @@
 				92C6F9EA2284BF0F0018CEF8 /* CollectionItem.swift */,
 				92C6F9E62284BEE70018CEF8 /* BaseCollectionViewLayout.swift */,
 				92C6F9E82284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift */,
-				92C6F9EC2284C1320018CEF8 /* BaseCollectionCell.swift */,
 				92824FA6229BE59A008B76A8 /* GloballyCachingCollectionViewLayout.swift */,
 			);
 			path = "Collection View";
@@ -318,6 +319,8 @@
 				92FF2B672282CB19001A02A9 /* NiblessView.swift */,
 				92FF2FA92282CEF7001A02A9 /* NiblessLabel.swift */,
 				92FF2FD32282D9E5001A02A9 /* NiblessButton.swift */,
+				92C6F9EC2284C1320018CEF8 /* NiblessCollectionCell.swift */,
+				92824FBA22A29E89008B76A8 /* NiblessCollectionReusableView.swift */,
 				92FF2B682282CB19001A02A9 /* NiblessTableView.swift */,
 				92FF2B692282CB19001A02A9 /* NiblessNavigationController.swift */,
 				92FF2B6A2282CB19001A02A9 /* NiblessViewController.swift */,
@@ -508,6 +511,7 @@
 			files = (
 				92FF2FA02282CCDA001A02A9 /* TextStyle.swift in Sources */,
 				92FF2FC02282D2C8001A02A9 /* UIViewPropertyAnimator+Utils.swift in Sources */,
+				92824FBB22A29E89008B76A8 /* NiblessCollectionReusableView.swift in Sources */,
 				92FF2FCC2282D720001A02A9 /* Interpolate.swift in Sources */,
 				92824FAA229BF13D008B76A8 /* ThemeManager.swift in Sources */,
 				92C6FA162286E0130018CEF8 /* ScopedState.swift in Sources */,
@@ -567,7 +571,7 @@
 				92FF2FC62282D3CB001A02A9 /* UIView+Utils.swift in Sources */,
 				92824F96229BE341008B76A8 /* SerialOperationQueue.swift in Sources */,
 				92C6F9E92284BEEF0018CEF8 /* PagingCollectionViewFlowLayout.swift in Sources */,
-				92C6F9ED2284C1320018CEF8 /* BaseCollectionCell.swift in Sources */,
+				92C6F9ED2284C1320018CEF8 /* NiblessCollectionCell.swift in Sources */,
 				92C6FA0F2286DDE50018CEF8 /* OptionalExtensions.swift in Sources */,
 				92FF2F9E2282CCDA001A02A9 /* TextAttributes.swift in Sources */,
 				92FF2FCF2282D87E001A02A9 /* String+Utils.swift in Sources */,

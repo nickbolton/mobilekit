@@ -1,15 +1,15 @@
 //
-//  BaseCollectionCell.swift
+//  NiblessCollectionReusableView.swift
 //  MobileKit
 //
-//  Created by Nick Bolton on 5/9/19.
+//  Created by Nick Bolton on 6/1/19.
 //  Copyright © 2019 Playboy Enterprises International, Inc. All rights reserved.
 //
 
 import UIKit
 
-open class BaseCollectionCell: UICollectionViewCell, InternalThemeable {
-  
+open class NiblessCollectionReusableView: UICollectionReusableView {
+
   // MARK: - Properties
   
   private (set) public var isHierarchyReady = false
