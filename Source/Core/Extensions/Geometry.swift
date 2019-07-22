@@ -216,7 +216,7 @@ public extension CGRect {
     // first of all, we check if point is inside rect. If it is, distance is zero
     guard !contains(p) else { return 0.0 }
     let dx = max(max(minX - p.x, p.x - maxX), 0.0)
-    let dy = max(max(minY - p.y, p.y - maxY), 0.0);
+    let dy = max(max(minY - p.y, p.y - maxY), 0.0)
     return sqrt(dx*dx + dy*dy)
   }
   
