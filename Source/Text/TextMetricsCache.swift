@@ -90,7 +90,7 @@ fileprivate let testString = "H"
   private let storage: Storage?
   
   public override init() {
-    let directory = Bundle.main.bundleIdentifier ?? "Rocket"
+    let directory = Bundle.main.bundleIdentifier ?? "MobileKit"
     let diskConfig = DiskConfig(
       // The name of disk storage, this will be used as folder name within directory
       name: "textMetrics",

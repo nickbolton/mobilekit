@@ -15,8 +15,13 @@ open class NiblessScrollView: UIScrollView {
   
   public override init(frame: CGRect) {
     super.init(frame: frame)
+    NotificationCenter.default.addObserver(self, selector: #selector(themeChanged), name: Notification.Name.ThemeChanged, object: ThemeManager.shared)
   }
   
+  deinit {
+    NotificationCenter.default.removeObserver(self)
+  }
+
   @available(*, unavailable,
   message: "Loading this view from a nib is unsupported in favor of initializer dependency injection."
   )
@@ -28,6 +33,7 @@ open class NiblessScrollView: UIScrollView {
   open override func didMoveToWindow() {
     super.didMoveToWindow()
     guard !isHierarchyReady else { return }
+    initializeViews()
     constructHierarchy()
     activateConstraints()
     applyTheme()
@@ -38,19 +44,21 @@ open class NiblessScrollView: UIScrollView {
   open func didFinishInitialization() {
   }
   
+  open func initializeViews() {
+  }
+
   open func constructHierarchy() {
   }
   
   open func activateConstraints() {
   }
   
+  @objc open func themeChanged() {
+    applyTheme()
+  }
+  
   open func applyTheme() {
-    walkViewHierarchy { v -> Bool in
-      if let themeable = v as? Themeable {
-        themeable.applyTheme()
-      }
-      return (v as? InternalThemeable) != nil
-    }
+    walkHierarchyAndApplyTheme()
   }
   
   open override func setNeedsDisplay() {

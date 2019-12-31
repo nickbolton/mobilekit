@@ -1,15 +1,14 @@
 //
-//  NiblessViewController.swift
+//  NiblessTabBarController.swift
 //  MobileKit
 //
-//  Created by Nick Bolton on 5/8/19.
-//  Copyright © 2019 Pixelbleed LLC. All rights reserved.
+//  Created by Nick Bolton on 12/20/19.
 //
 
 import UIKit
 import Reachability
 
-open class NiblessViewController: UIViewController {
+open class NiblessTabBarController: UITabBarController {
   
   public var firstAppearance: Bool { return appearanceCount <= 1 }
   private(set) public var appearanceCount = 0
@@ -21,27 +20,28 @@ open class NiblessViewController: UIViewController {
   public var shouldMonitoringReachability = false
   private (set) public var reachability = Reachability()
   
-  open override var preferredStatusBarStyle: UIStatusBarStyle { ThemeManager.shared.currentTheme().statusBarStyle }
-  open override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation { .fade }
-  
+  open override var preferredStatusBarStyle: UIStatusBarStyle {
+    return ThemeManager.shared.currentTheme().statusBarStyle
+  }
+
   public init() {
     super.init(nibName: nil, bundle: nil)
     NotificationCenter.default.addObserver(self, selector: #selector(themeChanged), name: Notification.Name.ThemeChanged, object: ThemeManager.shared)
   }
-
+  
   deinit {
     NotificationCenter.default.removeObserver(self)
   }
-
+  
   @available(*, unavailable,
-    message: "Loading this view controller from a nib is unsupported in favor of initializer dependency injection."
+  message: "Loading this view controller from a nib is unsupported in favor of initializer dependency injection."
   )
   public override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
     super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
   }
-
+  
   @available(*, unavailable,
-    message: "Loading this view controller from a nib is unsupported in favor of initializer dependency injection."
+  message: "Loading this view controller from a nib is unsupported in favor of initializer dependency injection."
   )
   public required init?(coder aDecoder: NSCoder) {
     fatalError("Loading this view controller from a nib is unsupported in favor of initializer dependency injection.")
@@ -68,17 +68,15 @@ open class NiblessViewController: UIViewController {
     isAppearing = false
     stopReachability()
   }
-    
+  
   @objc open func themeChanged() {
     applyTheme()
   }
   
   open func applyTheme() {
-    setNeedsStatusBarAppearanceUpdate()
-    view.backgroundColor = ThemeManager.shared.currentTheme().defaultBackgroundColor
     view.walkHierarchyAndApplyTheme()
   }
-
+  
   @objc open func applicationWillEnterForeground(noti: NSNotification) {
     if shouldMonitoringReachability {
       startReachability()
@@ -164,7 +162,7 @@ open class NiblessViewController: UIViewController {
   }
 }
 
-public extension NiblessViewController {
+public extension NiblessTabBarController {
   // MARK: Notification Observer Helpers
   
   func observeApplicationWillEnterForeground() {
@@ -259,7 +257,7 @@ public extension NiblessViewController {
   }
 }
 
-extension NiblessViewController {
+extension NiblessTabBarController {
   // MARK: Reachability
   
   public func startReachability() {

@@ -20,10 +20,10 @@ public class LockerManager: NSObject {
         super.init()
         registerLocker(DefaultLocker())
     }
-    
+        
     public var defaultLocker: DefaultLocker { return lockerNamed(_defaultLockerName) as! DefaultLocker }
     
-    private var lockers = [String: Locker]()
+    private (set) var lockers = [String: Locker]()
     
     public func registerLocker(_ locker: Locker) {
         lockers[locker.name] = locker
@@ -122,6 +122,16 @@ public class DefaultLocker: BaseLocker {
         get { return UserDefaults.standard.bool(forKey: hasLaunchedAppKey) }
         set {
             UserDefaults.standard.set(newValue, forKey: hasLaunchedAppKey)
+            DispatchQueue.global().async { UserDefaults.standard.synchronize() }
+        }
+    }
+    
+    private let currentUserInterfaceStyleKey = "currentUserInterfaceStyle"
+    @available(iOS 12.0, *)
+    public var currentUserInterfaceStyle: UIUserInterfaceStyle {
+        get { return UIUserInterfaceStyle(rawValue: UserDefaults.standard.integer(forKey: currentUserInterfaceStyleKey) ?? -1) ?? .light }
+        set {
+            UserDefaults.standard.set(newValue.rawValue, forKey: currentUserInterfaceStyleKey)
             DispatchQueue.global().async { UserDefaults.standard.synchronize() }
         }
     }

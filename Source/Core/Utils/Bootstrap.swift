@@ -33,6 +33,6 @@ open class Bootstrap: NSObject {
     
     open func setupWindow() -> UIWindow {
         let frame = UIScreen.main.bounds
-        return UIWindow(frame: frame)
+        return Window(frame: frame)
     }
 }

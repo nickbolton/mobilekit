@@ -43,4 +43,12 @@ Pod::Spec.new do |s|
     s.dependency 'ReSwift', '~> 4.0'
     s.exclude_files = '**/Info*.plist'
   end
+
+  s.subspec "iOSApplication" do |s|
+    s.dependency "MobileKit/Core"
+    s.dependency "MobileKit/Animator"
+    s.dependency "MobileKit/Text"
+    s.exclude_files = "**/Info*.plist"
+  end
+
 end

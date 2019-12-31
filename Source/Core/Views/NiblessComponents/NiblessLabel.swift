@@ -25,18 +25,27 @@ open class NiblessLabel: UILabel, InternalThemeable {
     fatalError("Loading this view from a nib is unsupported in favor of initializer dependency injection.")
   }
   
+  deinit {
+    NotificationCenter.default.removeObserver(self)
+  }
+
   // MARK: - Methods
   open override func didMoveToWindow() {
     super.didMoveToWindow()
     guard !isHierarchyReady else { return }
+    initializeViews()
     constructHierarchy()
     activateConstraints()
     applyTheme()
     isHierarchyReady = true
     didFinishInitialization()
+    NotificationCenter.default.addObserver(self, selector: #selector(themeChanged), name: Notification.Name.ThemeChanged, object: ThemeManager.shared)
   }
   
   open func didFinishInitialization() {
+  }
+
+  open func initializeViews() {
   }
 
   open func constructHierarchy() {
@@ -45,13 +54,12 @@ open class NiblessLabel: UILabel, InternalThemeable {
   open func activateConstraints() {
   }
   
+  @objc open func themeChanged() {
+    applyTheme()
+  }
+  
   open func applyTheme() {
-    walkViewHierarchy { v -> Bool in
-      if let themeable = v as? Themeable {
-        themeable.applyTheme()
-      }
-      return (v as? InternalThemeable) != nil
-    }
+    walkHierarchyAndApplyTheme()
   }
   
   open override func setNeedsDisplay() {

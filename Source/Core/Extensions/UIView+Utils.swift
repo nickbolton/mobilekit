@@ -9,6 +9,16 @@
 import UIKit
 
 extension UIView {
+    
+  func walkHierarchyAndApplyTheme() {
+    walkViewHierarchy { v -> Bool in
+      if let themeable = v as? Themeable {
+        themeable.applyTheme()
+      }
+      return (v as? InternalThemeable) != nil
+    }
+  }
+
   public func convertCenter(to: UIView!) -> CGPoint {
     let center = CGPoint(x: bounds.midX, y: bounds.midY)
     return convert(center, to: to)

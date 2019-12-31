@@ -268,13 +268,27 @@ public class TextStyle: NSObject {
   }
   
   public func textViewHeight(inBoundingWidth boundingWidth: CGFloat) -> CGFloat {
+    return textViewFrame(inBoundingWidth: boundingWidth).height
+  }
+
+  public func textViewFrame(inBoundingWidth boundingWidth: CGFloat) -> CGRect {
     let boundBy = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
     let metrics = TextMetricsCache.shared.textMetrics(for: self, textType: .label, boundBy: boundBy)
     let adjustedBoundBy = CGSize(width: boundingWidth + metrics.textMargins.left + metrics.textMargins.right, height: CGFloat.greatestFiniteMagnitude)
-    let result = textViewFrame(for: .label, boundBy: adjustedBoundBy, usePreciseTextAlignments: true).height
-    return result
+    return textViewFrame(for: .label, boundBy: adjustedBoundBy, usePreciseTextAlignments: true)
   }
-  
+
+  public func textViewWidth(inBoundingHeight boundingHeight: CGFloat) -> CGFloat {
+    return textViewFrame(inBoundingHeight: boundingHeight).width
+  }
+
+  public func textViewFrame(inBoundingHeight boundingHeight: CGFloat) -> CGRect {
+    let boundBy = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)
+    let metrics = TextMetricsCache.shared.textMetrics(for: self, textType: .label, boundBy: boundBy)
+    let adjustedBoundBy = CGSize(width: CGFloat.greatestFiniteMagnitude, height: boundingHeight + metrics.textMargins.top + metrics.textMargins.bottom)
+    return textViewFrame(for: .label, boundBy: adjustedBoundBy, usePreciseTextAlignments: true)
+  }
+
   public func trueTextBounds(for textType: TargetTextType = .label, boundBy: CGSize = CGSize(width: CGFloat.greatestFiniteMagnitude, height: CGFloat.greatestFiniteMagnitude)) -> CGRect {
     let (containerFrame, _) = trueTextBoundsAndViewFrame(for: textType, boundBy: boundBy, usePreciseTextAlignments: true)
     return containerFrame
