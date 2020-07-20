@@ -12,8 +12,15 @@ extension Notification.Name {
   static public let ThemeChanged = Notification.Name("com.pixelbleed.themeManager.themeDidChange")
 }
 
+public enum ThemeType {
+  case light
+  case dark
+  case custom
+}
+
 public protocol Theme {
-  var name: String { get }
+  var identifier: String { get }
+  var type: ThemeType { get }
   var isDarkTheme: Bool { get }
   var defaultBackgroundColor: UIColor { get }
   var defaultAnimationDuration: TimeInterval { get }
@@ -30,9 +37,10 @@ public protocol Theme {
 
 open class DefaultTheme: Theme {
   public var fontScale: CGFloat = 1.0
-  public var name: String = ""
+  public var identifier = ThemeManager.defaultLightIdentifier
+  public var type = ThemeType.light
   public var isStatusBarHidden = false
-  fileprivate (set) public var isDarkTheme = false
+  public var isDarkTheme: Bool { return type == .dark }
   public var defaultBackgroundColor: UIColor = .black
   public var defaultAnimationDuration: TimeInterval { return 0.3 }
   public var statusBarStyle: UIStatusBarStyle = .default
@@ -55,8 +63,8 @@ open class DefaultTheme: Theme {
 open class DefaultLightTheme: DefaultTheme {
   public override init() {
     super.init()
-    self.name = ThemeManager.defaultLightThemeName
-    self.isDarkTheme = false
+    self.identifier = ThemeManager.defaultLightIdentifier
+    self.type = .light
     self.defaultBackgroundColor = .white
     self.statusBarStyle = .default
     self.keyboardAppearance = .light
@@ -67,8 +75,8 @@ open class DefaultLightTheme: DefaultTheme {
 open class DefaultDarkTheme: DefaultTheme {
   public override init() {
     super.init()
-    self.isDarkTheme = true
-    self.name = ThemeManager.defaultDarkThemeName
+    self.identifier = ThemeManager.defaultDarkIdentifier
+    self.type = .dark
     self.defaultBackgroundColor = .black
     self.statusBarStyle = .lightContent
     self.keyboardAppearance = .dark
@@ -78,23 +86,42 @@ open class DefaultDarkTheme: DefaultTheme {
 
 public class ThemeManager: NSObject {
   
-  static public let defaultLightThemeName = "ThemeManager.defaultLight"
-  static public let defaultDarkThemeName = "ThemeManager.defaultDark"
+  static public let defaultLightIdentifier = "ThemeManager.defaultLight"
+  static public let defaultDarkIdentifier = "ThemeManager.defaultDark"
   
   static public let shared = ThemeManager()
   private override init() {}
   
   private (set) var themes = [String: Theme]()
-  private (set) public var selectedName: String = ""
+  private (set) public var selectedIdentifier: String = ""
+
+  private var lightTheme = DefaultLightTheme()
+  private var darkTheme = DefaultDarkTheme()
   
   public func currentTheme() -> Theme {
-    return themes[selectedName] ?? DefaultLightTheme()
+    return themes[selectedIdentifier] ?? DefaultLightTheme()
   }
-  
-  public func selectedTheme<T>() -> T? {
-    return themes[selectedName] as? T
+
+  public func initialize() {
+    if #available(iOS 13.0, *) {
+      if UITraitCollection.current.userInterfaceStyle == .dark {
+        selectDarkTheme()
+      } else {
+        selectLightTheme()
+      }
+    } else {
+      selectLightTheme()
+    }
   }
-  
+
+  public func selectDarkTheme() {
+    select(theme: darkTheme)
+  }
+
+  public func selectLightTheme() {
+    select(theme: lightTheme)
+  }
+
   var contentSizeCategory: UIContentSizeCategory = UIContentSizeCategory.large {
     didSet {
       var scale = 0
@@ -143,25 +170,33 @@ public class ThemeManager: NSObject {
       for theme in themes.values {
         var updatedTheme = theme
         updatedTheme.fontScale = fontScale
-        themes[updatedTheme.name] = updatedTheme
+        themes[updatedTheme.identifier] = updatedTheme
       }
     }
   }
   
   public func registerTheme(_ theme: Theme) {
-    themes[theme.name] = theme
-    if selectedName.count <= 0 {
-      selectThemeNamed(theme.name)
+    themes[theme.identifier] = theme
+    if selectedIdentifier.count <= 0 {
+      selectTheme(withIdentifier: theme.identifier)
     }
   }
+
+  public func select(theme: Theme) {
+    selectTheme(withIdentifier: theme.identifier)
+  }
+
+  public func fireThemeChangedNotification() {
+    NotificationCenter.default.post(name: Notification.Name.ThemeChanged, object: self)
+  }
   
-  public func selectThemeNamed(_ name: String) {
-    guard themes[name] != nil else { return }
-    let changed = selectedName != name
-    selectedName = name
+  public func selectTheme(withIdentifier identifier: String) {
+    guard themes[identifier] != nil else { return }
+    let changed = selectedIdentifier != identifier
+    selectedIdentifier = identifier
     contentSizeCategory = UIApplication.shared.preferredContentSizeCategory
     if changed {
-      NotificationCenter.default.post(name: Notification.Name.ThemeChanged, object: self)
+      fireThemeChangedNotification()
     }
   }
 }

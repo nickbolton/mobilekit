@@ -11,6 +11,7 @@ import UIKit
 @available(iOS 10.0, *)
 public protocol TransitionAnimatable: class {
   var viewController: UIViewController! { get }
+  var userInfo: Any? { get }
   var targetChildTransitionAnimatable: TransitionAnimatable? { get }
   func overridingTransitionAnimatable(with context: TransitionContext) -> TransitionAnimatable?
   func setupTransition(with context: TransitionContext, delay: inout TimeInterval)
@@ -18,6 +19,7 @@ public protocol TransitionAnimatable: class {
   func finishTransition(with context: TransitionContext)
   func cancelTransition(with context: TransitionContext)
   func uiElement(forKey: String, with context: TransitionContext) -> UIView?
+  func uiElements() -> [UIView]
   func animators(with context: TransitionContext) -> [Animator]
 }
 
@@ -25,14 +27,15 @@ public protocol TransitionAnimatable: class {
 extension TransitionAnimatable {
   public var viewController: UIViewController! { return UIViewController() }
   public var isInteractive: Bool { return false }
+  public var userInfo: Any? { nil }
   public var targetChildTransitionAnimatable: TransitionAnimatable? { return nil }
-  public var targetChildViewController: UIViewController? { return nil }
   public func overridingTransitionAnimatable(with context: TransitionContext) -> TransitionAnimatable? { return nil }
   public func setupTransition(with context: TransitionContext, delay: inout TimeInterval) { }
   public func transition(with context: TransitionContext, at time: TimeInterval) { }
   public func finishTransition(with context: TransitionContext) { }
   public func cancelTransition(with context: TransitionContext) { }
   public func uiElement(forKey: String, with context: TransitionContext) -> UIView? { return nil }
+  public func uiElements() -> [UIView] { [] }
 }
 
 @available(iOS 10.0, *)
@@ -51,7 +54,6 @@ public class TransitionContext: AnimationContext {
   public var from: TransitionAnimatable { didSet { transitionKey = buildTransitionKey() } }
   public var to: TransitionAnimatable { didSet { transitionKey = buildTransitionKey() } }
   public var selectedIndexPath: IndexPath?
-  public var userInfo: Any?
   public var isPresenting: Bool { return !isReversed }
   public var transitionKey = ""
   public var resolvedFrom: TransitionAnimatable { return from.overridingTransitionAnimatable(with: self) ?? from }
@@ -68,7 +70,9 @@ public class TransitionContext: AnimationContext {
   }
   
   required public init(containerView: UIView) {
-    fatalError("init(containerView:) has not been implemented")
+    self.from = DefaultTransitionAnimatable()
+    self.to = DefaultTransitionAnimatable()
+    super.init(containerView: containerView)
   }
   
   private func buildTransitionKey() -> String {
@@ -100,12 +104,7 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
     get { return transitionContext.selectedIndexPath }
     set { transitionContext.selectedIndexPath = newValue }
   }
-  
-  public var userInfo: Any? {
-    get { return transitionContext.userInfo }
-    set { transitionContext.userInfo = newValue }
-  }
-  
+
   public var interactiveCompletionDuration: TimeInterval = 0.0
   public var animationDuration: TimeInterval = 0.3
   private (set) public var transitionContext = TransitionContext(transitionManager: nil, from: DefaultTransitionAnimatable(), to: DefaultTransitionAnimatable(), containerView: UIView(), isPresenting: false)
@@ -118,7 +117,7 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
   public var isVerbose = false
   public var isSetupOnly = false
   public var isCancelled = false
-  
+
   public var completionBlock: DefaultHandler?
   
   private func animators(for key: String) -> [Animator] {
@@ -128,7 +127,8 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
   public var isCompletionDisabled = false // for debugging purposes only
   
   private var propertyAnimators: [UIViewPropertyAnimator]?
-  
+  private var dynamicAnimators: [UIDynamicAnimator]?
+
   public weak var chainingNavigationDelegate: UINavigationControllerDelegate?
   
   public func cancelAnimations() {
@@ -162,10 +162,11 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
                       onComplete: DefaultHandler? = nil) {
     completionBlock = onComplete
     let toView = to.viewController.view!
-    doAnimation(fromVC: from, toVC: to, toView: toView, container: toView, duration: duration)
+    let fromView = from.viewController.view!
+    doAnimation(containerView: fromView, fromVC: from, toVC: to, fromView: fromView, toView: toView, container: toView, duration: duration)
   }
   
-  private weak var contextTransitioning: UIViewControllerContextTransitioning?
+  public private (set) weak var contextTransitioning: UIViewControllerContextTransitioning?
   
   private func doAnimation(using contextTransitioning: UIViewControllerContextTransitioning) {
     self.contextTransitioning = contextTransitioning
@@ -174,7 +175,8 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
     let toViewController = contextTransitioning.viewController(forKey: .to)!
     let fromViewController = contextTransitioning.viewController(forKey: .from)!
     let toView = contextTransitioning.view(forKey: .to)!
-    
+    let fromView = contextTransitioning.view(forKey: .from)!
+
     var proposedFromVC = fromViewController as? TransitionAnimatable
     if let targetFromVC = proposedFromVC?.targetChildTransitionAnimatable {
       proposedFromVC = targetFromVC
@@ -218,11 +220,13 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
     toView.isHidden = isRevealing
     
     let duration = self.transitionDuration(using: contextTransitioning)
-    doAnimation(fromVC: fromVC, toVC: toVC, toView: toView, container: container, duration: duration)
+    doAnimation(containerView: container, fromVC: fromVC, toVC: toVC, fromView: fromView, toView: toView, container: container, duration: duration)
   }
   
-  private func doAnimation(fromVC: TransitionAnimatable,
+  private func doAnimation(containerView: UIView,
+                           fromVC: TransitionAnimatable,
                            toVC: TransitionAnimatable,
+                           fromView: UIView,
                            toView: UIView,
                            container: UIView,
                            duration: TimeInterval) {
@@ -290,12 +294,12 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
       UIApplication.shared.beginIgnoringInteractionEvents()
     }
     
-    animateUsingPropertyAnimator(animators: animators, delay: setupDelay, duration: duration, from: fromTransitionAnimatable, to: toTransitionAnimatable) {
+    animateUsingPropertyAnimator(containerView: containerView, animators: animators, delay: setupDelay, duration: duration, from: fromTransitionAnimatable, to: toTransitionAnimatable) {
       if !self.isInteractive {
         UIApplication.shared.endIgnoringInteractionEvents()
       }
       completion(true)
-    }    
+    }
   }
   
   public func completeInteractiveTransition() {
@@ -333,6 +337,7 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
       selectedIndexPath = nil
     }
     propertyAnimators = nil
+    dynamicAnimators = nil
     transitionContext.processedSetupViews.removeAll()
     if (!isPresenting && transitionContext.isCompleted) || (isPresenting && !transitionContext.isCompleted) {
       allAnimatorsDict.removeValue(forKey: transitionContext.transitionKey)
@@ -342,19 +347,19 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
   }
   
   @discardableResult
-  private func animateUsingPropertyAnimator(animators: [Animator], delay: TimeInterval, duration: TimeInterval, from: TransitionAnimatable, to: TransitionAnimatable, onComplete: @escaping DefaultHandler) -> Int {
+  private func animateUsingPropertyAnimator(containerView: UIView, animators: [Animator], delay: TimeInterval, duration: TimeInterval, from: TransitionAnimatable, to: TransitionAnimatable, onComplete: @escaping DefaultHandler) -> Int {
     if delay > 0.0 {
       DispatchQueue.main.asyncAfter(timeInterval: delay) {
-        self.animateUsingPropertyAnimator(animators: animators, duration: duration, from: from, to: to, onComplete: onComplete)
+        self.animateUsingPropertyAnimator(containerView: containerView, animators: animators, duration: duration, from: from, to: to, onComplete: onComplete)
       }
     } else {
-      return animateUsingPropertyAnimator(animators: animators, duration: duration, from: from, to: to, onComplete: onComplete)
+      return animateUsingPropertyAnimator(containerView: containerView, animators: animators, duration: duration, from: from, to: to, onComplete: onComplete)
     }
     return 0
   }
   
   @discardableResult
-  private func animateUsingPropertyAnimator(animators: [Animator], duration: TimeInterval, from: TransitionAnimatable, to: TransitionAnimatable, onComplete: @escaping DefaultHandler) -> Int {
+  private func animateUsingPropertyAnimator(containerView: UIView, animators: [Animator], duration: TimeInterval, from: TransitionAnimatable, to: TransitionAnimatable, onComplete: @escaping DefaultHandler) -> Int {
     
     var timingBuckets = [String: [Animator]]()
     for anim in animators {
@@ -363,31 +368,56 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
       timingBuckets[anim.easing.hashKey] = array
     }
     
-    var animators = [UIViewPropertyAnimator]()
+    var propertyAnimators = [UIViewPropertyAnimator]()
+    var dynamicAnimators = [UIDynamicAnimator]()
     var remainingCompletionCount = timingBuckets.values.count
     
     for bucket in timingBuckets.values {
-      let animator = UIViewPropertyAnimator(duration: duration, timingParameters: bucket.first!.easing.cubicTimingParameters!)
+      guard let anim = bucket.first else { continue }
+      let propertyAnimator = UIViewPropertyAnimator(duration: duration, timingParameters: anim.easing.timingParameters)
+      var propertyAnimatorCount = 0
       
-      for anim in bucket {
-        animator.addAnimations({
-          anim.performAnimations(context: self.transitionContext)
-        }, delayFactor: CGFloat(anim.startingAt))
-      }
-      
-      animator.addCompletion { position in
-        remainingCompletionCount -= 1
-        if remainingCompletionCount <= 0 {
-          onComplete()
+      for anim in bucket.sorted { $0.order < $1.order } {
+        if anim.dynamicBehaviors.count > 0 {
+
+          if let referenceView = anim.allViews.first?.superview {
+            let dynamicAnimator = UIDynamicAnimator(referenceView: referenceView)
+            anim.dynamicBehaviors.forEach { b in
+              dynamicAnimator.addBehavior(b)
+            }
+
+            DispatchQueue.main.asyncAfter(timeInterval: anim.duration) {
+              remainingCompletionCount -= 1
+              if remainingCompletionCount <= 0 {
+                onComplete()
+              }
+            }
+          }
+
+        } else {
+          propertyAnimatorCount += 1
+          propertyAnimator.addAnimations({
+            anim.performAnimations(context: self.transitionContext)
+          }, delayFactor: CGFloat(anim.startingAt))
         }
       }
-      
-      animator.startAnimation()
-      
-      animators.append(animator)
+
+      if propertyAnimatorCount > 0 {
+        propertyAnimator.addCompletion { position in
+          remainingCompletionCount -= 1
+          if remainingCompletionCount <= 0 {
+            onComplete()
+          }
+        }
+
+        propertyAnimator.startAnimation()
+
+        propertyAnimators.append(propertyAnimator)
+      }
+
     }
     
-    propertyAnimators = animators
+    self.propertyAnimators = propertyAnimators
     
     return timingBuckets.count
   }
@@ -435,12 +465,10 @@ public class AnimatorTransitionManager: UIPercentDrivenInteractiveTransition, UI
   }
   
   public func navigationController(_ navigationController: UINavigationController, willShow viewController: UIViewController, animated: Bool) {
-    guard let _ = chainingNavigationDelegate?.navigationController?(navigationController, willShow: viewController, animated: animated) else { return }
-    chainingNavigationDelegate?.navigationController!(navigationController, willShow: viewController, animated: animated)
+    chainingNavigationDelegate?.navigationController?(navigationController, willShow: viewController, animated: animated)
   }
   
   public func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
-    guard let _ =  chainingNavigationDelegate?.navigationController?(navigationController, didShow: viewController, animated: animated) else { return }
-    chainingNavigationDelegate?.navigationController!(navigationController, didShow: viewController, animated: animated)
+    chainingNavigationDelegate?.navigationController?(navigationController, didShow: viewController, animated: animated)
   }
 }

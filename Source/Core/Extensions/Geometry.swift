@@ -67,7 +67,7 @@ public extension CGPoint {
     return CGPoint(x: x + offset, y: y + offset)
   }
   
-  func offset(dx: CGFloat, y dy: CGFloat) -> CGPoint {
+  func offset(dx: CGFloat, dy: CGFloat) -> CGPoint {
     return CGPoint(x: x + dx, y: y + dy)
   }
   
@@ -120,6 +120,14 @@ public extension CGSize {
     let epsilon: CGFloat = 0.1
     return CGSize(width: max(width, epsilon), height: max(height, epsilon))
   }
+
+  func offset(by offset: CGFloat) -> CGSize {
+    return CGSize(width: width + offset, height: height + offset)
+  }
+
+  func offset(dx: CGFloat, dy: CGFloat) -> CGSize {
+    return CGSize(width: width + dx, height: height + dy)
+  }
   
   var pointAligned: CGSize {
     return CGSize(width: width.pointAligned, height: height.pointAligned)
@@ -166,6 +174,8 @@ public extension CGSize {
 }
 
 public extension CGRect {
+
+  var center: CGPoint { return CGPoint(x: midX, y: midY) }
   
   var epsilonBoundSize: CGRect {
     return CGRect(origin: origin, size: size.epsilonBoundSize)

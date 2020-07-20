@@ -12,7 +12,7 @@ extension UIViewPropertyAnimator {
   @discardableResult
   open class func runningPropertyAnimator(withDuration duration: TimeInterval, delay: TimeInterval = 0.0, easing: Easing = Easing(.quadInOut), animations: @escaping () -> Void, completion: ((UIViewAnimatingPosition) -> Void)? = nil) -> UIViewPropertyAnimator {
     
-    let animator = UIViewPropertyAnimator(duration: duration, timingParameters: easing)
+    let animator = UIViewPropertyAnimator(duration: duration, timingParameters: easing.timingParameters)
     animator.addAnimations(animations)
     animator.addCompletion { pos in
       completion?(pos)

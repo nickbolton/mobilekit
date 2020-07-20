@@ -13,7 +13,9 @@ open class NiblessButton: UIButton, InternalThemeable {
   // MARK: - Properties
   
   private (set) public var isHierarchyReady = false
-  
+
+  public var appContext: AppContext { AppContext.shared }
+
   public override init(frame: CGRect) {
     super.init(frame: frame)
   }

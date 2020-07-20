@@ -9,17 +9,17 @@ import UIKit
 
 public struct SketchShadow {
     public let color: UIColor
-    public let opacity: Float
+    public let opacity: CGFloat
     public let x: CGFloat
     public let y: CGFloat
     public let blur: CGFloat
     public let spread: CGFloat
     
     public init(color: UIColor = .black,
-                opacity: Float = 0.5,
+                opacity: CGFloat = 1.0,
                 x: CGFloat = 0,
-                y: CGFloat = 2,
-                blur: CGFloat = 4,
+                y: CGFloat = 0,
+                blur: CGFloat = 0,
                 spread: CGFloat = 0) {
         self.color = color
         self.opacity = opacity
@@ -40,17 +40,17 @@ public extension CALayer {
                           blur: sketchShadow.blur,
                           spread: sketchShadow.spread)
     }
-    
+
     func applySketchShadow(
         color: UIColor = .black,
-        opacity: Float = 0.5,
+        opacity: CGFloat = 1.0,
         x: CGFloat = 0,
-        y: CGFloat = 2,
-        blur: CGFloat = 4,
-        spread: CGFloat = 0)
-    {
+        y: CGFloat = 0,
+        blur: CGFloat = 0,
+        spread: CGFloat = 0) {
+
         shadowColor = color.cgColor
-        shadowOpacity = opacity
+        shadowOpacity = Float(opacity)
         shadowOffset = CGSize(width: x, height: y)
         shadowRadius = blur / 2.0
         if spread == 0 {

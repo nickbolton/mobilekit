@@ -21,6 +21,8 @@ open class NiblessView: UIView, InternalThemeable {
   
   private (set) public var isHierarchyReady = false
 
+  public var appContext: AppContext { AppContext.shared }
+
   public override init(frame: CGRect) {
     super.init(frame: frame)
   }
@@ -72,5 +74,5 @@ open class NiblessView: UIView, InternalThemeable {
   open override func setNeedsDisplay() {
     super.setNeedsDisplay()
     applyTheme()
-  }    
+  }
 }

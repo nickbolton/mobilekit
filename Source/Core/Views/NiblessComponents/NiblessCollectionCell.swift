@@ -13,7 +13,9 @@ open class NiblessCollectionCell: UICollectionViewCell, InternalThemeable {
   // MARK: - Properties
   
   private (set) public var isHierarchyReady = false
-  
+
+  public var appContext: AppContext { AppContext.shared }
+
   public static var reuseIdentifier: String { NSStringFromClass(self) }
   
   public override init(frame: CGRect) {

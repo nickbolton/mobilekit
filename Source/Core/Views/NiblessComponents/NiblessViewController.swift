@@ -68,6 +68,32 @@ open class NiblessViewController: UIViewController {
     isAppearing = false
     stopReachability()
   }
+
+  open override func traitCollectionDidChange(_ previousTraitCollection: UITraitCollection?) {
+    guard let previousTraitCollection = previousTraitCollection else {
+      selectLightThemeIfNecessary()
+      return
+    }
+    if #available(iOS 13.0, *) {
+      if previousTraitCollection.userInterfaceStyle == .dark {
+        selectLightThemeIfNecessary()
+      } else  {
+        selectDarkThemeIfNecessary()
+      }
+    } else {
+      selectLightThemeIfNecessary()
+    }
+  }
+
+  private func selectLightThemeIfNecessary() {
+    guard ThemeManager.shared.currentTheme().isDarkTheme else { return }
+    ThemeManager.shared.selectLightTheme()
+  }
+
+  private func selectDarkThemeIfNecessary() {
+    guard !ThemeManager.shared.currentTheme().isDarkTheme else { return }
+    ThemeManager.shared.selectDarkTheme()
+  }
     
   @objc open func themeChanged() {
     applyTheme()
@@ -75,7 +101,6 @@ open class NiblessViewController: UIViewController {
   
   open func applyTheme() {
     setNeedsStatusBarAppearanceUpdate()
-    view.backgroundColor = ThemeManager.shared.currentTheme().defaultBackgroundColor
     view.walkHierarchyAndApplyTheme()
   }
 

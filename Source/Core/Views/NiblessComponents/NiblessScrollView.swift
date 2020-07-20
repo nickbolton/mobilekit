@@ -12,7 +12,9 @@ open class NiblessScrollView: UIScrollView {
   // MARK: - Properties
   
   private (set) public var isHierarchyReady = false
-  
+
+  public var appContext: AppContext { AppContext.shared }
+
   public override init(frame: CGRect) {
     super.init(frame: frame)
     NotificationCenter.default.addObserver(self, selector: #selector(themeChanged), name: Notification.Name.ThemeChanged, object: ThemeManager.shared)

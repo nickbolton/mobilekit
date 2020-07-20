@@ -55,7 +55,7 @@ public class LayoutCache {
   
   public func height(forKey key: String) -> CGFloat? {
     guard let entry = try? storage?.object(ofType: CGFloatEntry.self, forKey: key) else { return nil }
-    return entry?.value
+    return entry.value
   }
     
   public func store(height: CGFloat, forKey key: String) {
@@ -64,7 +64,7 @@ public class LayoutCache {
 
   public func size(forKey key: String) -> CGSize? {
     guard let entry = try? storage?.object(ofType: CGSizeEntry.self, forKey: key) else { return nil }
-    return entry?.value
+    return entry.value
   }
     
   public func store(size: CGSize, forKey key: String) {
@@ -73,7 +73,7 @@ public class LayoutCache {
 
   public func rect(forKey key: String) -> CGRect? {
     guard let entry = try? storage?.object(ofType: CGRectEntry.self, forKey: key) else { return nil }
-    return entry?.value
+    return entry.value
   }
     
   public func store(rect: CGRect, forKey key: String) {

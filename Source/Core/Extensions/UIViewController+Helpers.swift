@@ -24,6 +24,22 @@ extension UIViewController {
         present(nav, animated: animated, completion: completion)
         return nav
     }
+
+    public func showChild(_ viewController: UIViewController, in containerIn: UIView? = nil) {
+        guard let container = containerIn ?? view else { return }
+        viewController.willMove(toParent: self)
+        viewController.view.frame = container.bounds
+        container.addSubview(viewController.view)
+        addChild(viewController)
+        viewController.didMove(toParent: self)
+    }
+
+    public func removeAsChild() {
+        willMove(toParent: nil)
+        view.removeFromSuperview()
+        removeFromParent()
+        didMove(toParent: nil)
+    }
     
     // MARK: Navigation
     

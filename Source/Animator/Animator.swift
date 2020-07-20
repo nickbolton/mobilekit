@@ -23,7 +23,9 @@ public struct AnimationDirection: OptionSet {
 
 @available(iOS 10.0, *)
 public protocol Animator {
+  var allViews: [UIView] { get }
   var tag: Int { get set }
+  var order: Int { get }
   var isReverse: Bool { get set }
   var isDisabled: Bool { get set }
   var useNativeViews: Bool { get set }
@@ -35,6 +37,7 @@ public protocol Animator {
   var reverseStartingAt: TimeInterval { get }
   var reverseEndingAt: TimeInterval { get }
   var directionMask: AnimationDirection { get }
+  var dynamicBehaviors: [UIDynamicBehavior] { get }
   func setupAnimation(context: AnimationContext)
   func performAnimations(context: AnimationContext)
   func performAnimations(at: TimeInterval, context: AnimationContext)
@@ -507,6 +510,7 @@ open class BaseAnimator: NSObject, Animator {
   var hiddenViews = Set<UIView>()
   public var directionMask = AnimationDirection.both
   public var isReverse = false
+  public var order = 0
   public var isDisabled = false
   public var duration: TimeInterval = 0.0 { didSet { if duration < 0.0 { duration = 0.0 } } }
   public var delay: TimeInterval = 0.0 { didSet { if delay < 0.0 { delay = 0.0 } } }
@@ -517,11 +521,34 @@ open class BaseAnimator: NSObject, Animator {
   public var reverseStartingAt: TimeInterval = 1.0
   public var reverseEndingAt: TimeInterval = 0.0
   public var tag: Int = 0
+  private (set) public var dynamicBehaviors = [UIDynamicBehavior]()
+
+  public var allViews: [UIView] {
+    return (views.filter { $0 != nil }) as! [UIView]
+  }
   
   required public init(views: [UIView?] = [], easing: Easing = Easing(.quadInOut)) {
     self.views = views
     self.easing = easing
     super.init()
+  }
+
+  public func addGravityBehavior(direction: CGVector? = nil, angle: CGFloat? = nil, magitude: CGFloat? = nil) {
+    let items = allViews
+    guard items.count > 0 else { return }
+    let gravity = UIGravityBehavior(items: items)
+    gravity.gravityDirection = direction ?? gravity.gravityDirection
+    gravity.angle = angle ?? gravity.angle
+    gravity.magnitude = magitude ?? gravity.magnitude
+    dynamicBehaviors.append(gravity)
+  }
+
+  public func addSnapBehavior(point: CGPoint, damping: CGFloat? = nil) {
+    allViews.forEach { view in
+      let snap = UISnapBehavior(item: view, snapTo: point)
+      snap.damping = damping ?? snap.damping
+      dynamicBehaviors.append(snap)
+    }
   }
   
   public func copy() -> Animator {
@@ -607,7 +634,7 @@ public class BlockAnimator: BaseAnimator {
   public let cancelHandler: BlockAnimatorHandler?
   public let completionHandler: BlockAnimatorHandler?
   
-  required public init(views: [UIView?], setupHandler: BlockAnimatorHandler? = nil, performHandler: BlockAnimatorHandler? = nil, performAtTimeHandler: BlockAnimatorAtTimeHandler? = nil, cancelHandler: BlockAnimatorHandler? = nil, completionHandler: BlockAnimatorHandler? = nil, startingAt: TimeInterval = 0.0, endingAt: TimeInterval = 1.0, easing: Easing = Easing(.quadInOut)) {
+  required public init(views: [UIView?], startingAt: TimeInterval = 0.0, endingAt: TimeInterval = 1.0, easing: Easing = Easing(.quadInOut), setupHandler: BlockAnimatorHandler? = nil, performHandler: BlockAnimatorHandler? = nil, performAtTimeHandler: BlockAnimatorAtTimeHandler? = nil, cancelHandler: BlockAnimatorHandler? = nil, completionHandler: BlockAnimatorHandler? = nil) {
     self.setupHandler = setupHandler
     self.performHandler = performHandler
     self.performAtTimeHandler = performAtTimeHandler

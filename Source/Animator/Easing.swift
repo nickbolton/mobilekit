@@ -12,6 +12,7 @@ import UIKit
 
 public protocol TimingFunctionType {
   func solveForTime(_ x: Double) -> Double
+  func inverseSolveForTime(_ x: Double) -> Double
 }
 
 public struct LinearTimingFunction: TimingFunctionType {
@@ -20,6 +21,26 @@ public struct LinearTimingFunction: TimingFunctionType {
   public func solveForTime(_ x: Double) -> Double {
     return x
   }
+
+  public func inverseSolveForTime(_ x: Double) -> Double {
+    guard x != 0 else { return 0 }
+    return 1.0 / x
+  }
+}
+
+public struct EaseOutElasticTimingFunction: TimingFunctionType {
+  public init() {}
+
+  public func solveForTime(_ x: Double) -> Double {
+    let c4 = (2.0 * Double.pi) / 3.0
+    guard x != 0.0, x != 1.0 else { return x }
+
+    return pow(2.0, -10.0 * x) * sin((x * 10.0 - 0.75) * c4) + 1.0;
+  }
+
+  public func inverseSolveForTime(_ x: Double) -> Double {
+    return solveForTime(x)
+  }
 }
 
 extension UnitBezier: TimingFunctionType {
@@ -27,19 +48,28 @@ extension UnitBezier: TimingFunctionType {
   public func solveForTime(_ x: Double) -> Double {
     return solve(x)
   }
+
+  public func inverseSolveForTime(_ x: Double) -> Double {
+    return inverseSolve(x)
+  }
 }
 
 // MARK: - Easing
 public typealias Ease = (_ t: CGFloat, _ b: CGFloat, _ c: CGFloat) -> CGFloat
 
 @available(iOS 10.0, *)
-public class Easing: NSObject, TimingFunctionType, UITimingCurveProvider {
+public class Easing: NSObject, TimingFunctionType {
   
-  var bezier: UnitBezier
+  var timingFunction: TimingFunctionType
+  var dampingRatio: CGFloat?
+  var initialVelocity = CGVector.zero
+
+  var isSpringType: Bool { dampingRatio != nil }
   
   static public var defaultEasing: Easing = Easing(.curve(0.57, 0.12, 0.38, 0.89))
   
   public func encode(with aCoder: NSCoder) {
+    guard let bezier = timingFunction as? UnitBezier else { return }
     aCoder.encode(bezier.p1x, forKey: "p1x")
     aCoder.encode(bezier.p1y, forKey: "p1y")
     aCoder.encode(bezier.p2x, forKey: "p2x")
@@ -51,22 +81,41 @@ public class Easing: NSObject, TimingFunctionType, UITimingCurveProvider {
     let p1y = aDecoder.decodeDouble(forKey: "p1y")
     let p2x = aDecoder.decodeDouble(forKey: "p2x")
     let p2y = aDecoder.decodeDouble(forKey: "p2y")
-    bezier = UnitBezier(p1x, p1y, p2x, p2y)
+    timingFunction = UnitBezier(p1x, p1y, p2x, p2y)
   }
   
   public func copy(with zone: NSZone? = nil) -> Any {
-    return Easing(.curve(bezier.p1x, bezier.p1y, bezier.p2x, bezier.p2y))
+    if let dampingRatio = dampingRatio {
+      return Easing(.spring(dampingRatio, initialVelocity))
+    } else if let bezier = timingFunction as? UnitBezier {
+      return Easing(.curve(bezier.p1x, bezier.p1y, bezier.p2x, bezier.p2y))
+    }
+    return Easing(.timingFunction(timingFunction))
   }
   
-  public var hashKey: String { return "\(bezier.p1x),\(bezier.p1y),\(bezier.p2x),\(bezier.p2y)" }
-  
-  public var timingCurveType: UITimingCurveType { return .cubic }
-  public var cubicTimingParameters: UICubicTimingParameters? {
-    let p1 = CGPoint(x: bezier.p1x, y: bezier.p1y)
-    let p2 = CGPoint(x: bezier.p2x, y: bezier.p2y)
-    return UICubicTimingParameters(controlPoint1: p1, controlPoint2: p2)
+  public var hashKey: String {
+    if let dampingRatio = dampingRatio {
+      return "\(dampingRatio),\(initialVelocity.dx),\(initialVelocity.dy)"
+    }
+    if let bezier = timingFunction as? UnitBezier {
+      return "\(bezier.p1x),\(bezier.p1y),\(bezier.p2x),\(bezier.p2y)"
+    }
+    return "timingFunction"
   }
-  public var springTimingParameters: UISpringTimingParameters? { return nil }
+  
+  public var timingCurveType: UITimingCurveType { isSpringType ? .spring : .cubic }
+
+  public var timingParameters: UITimingCurveProvider {
+    if let dampingRatio = dampingRatio {
+      return UISpringTimingParameters(dampingRatio: dampingRatio, initialVelocity: initialVelocity)
+    }
+    if let bezier = timingFunction as? UnitBezier {
+      let p1 = CGPoint(x: bezier.p1x, y: bezier.p1y)
+      let p2 = CGPoint(x: bezier.p2x, y: bezier.p2y)
+      return UICubicTimingParameters(controlPoint1: p1, controlPoint2: p2)
+    }
+    return UICubicTimingParameters()
+  }
   
   public enum EasingType {
     case sineIn
@@ -102,77 +151,89 @@ public class Easing: NSObject, TimingFunctionType, UITimingCurveProvider {
     case backInOut
     
     case curve(Double, Double, Double, Double)
+
+    case spring(CGFloat, CGVector)
+
+    case timingFunction(TimingFunctionType)
   }
   
   public init(_ easing: EasingType) {
     switch easing {
     case .sineIn:
-      bezier = UnitBezier(0.47, 0, 0.745, 0.715)
+      timingFunction = UnitBezier(0.47, 0, 0.745, 0.715)
     case .sineOut:
-      bezier = UnitBezier(0.39, 0.575, 0.565, 1)
+      timingFunction = UnitBezier(0.39, 0.575, 0.565, 1)
     case .sineInOut:
-      bezier = UnitBezier(0.455, 0.03, 0.515, 0.955)
+      timingFunction = UnitBezier(0.455, 0.03, 0.515, 0.955)
       
     case .quadIn:
-      bezier = UnitBezier(0.55, 0.085, 0.68, 0.53)
+      timingFunction = UnitBezier(0.55, 0.085, 0.68, 0.53)
     case .quadOut:
-      bezier = UnitBezier(0.25, 0.46, 0.45, 0.94)
+      timingFunction = UnitBezier(0.25, 0.46, 0.45, 0.94)
     case .quadInOut:
-      bezier = UnitBezier(0.455, 0.03, 0.515, 0.955)
+      timingFunction = UnitBezier(0.455, 0.03, 0.515, 0.955)
       
     case .cubicIn:
-      bezier = UnitBezier(0.55, 0.055, 0.675, 0.19)
+      timingFunction = UnitBezier(0.55, 0.055, 0.675, 0.19)
     case .cubicOut:
-      bezier = UnitBezier(0.215, 0.61, 0.355, 1)
+      timingFunction = UnitBezier(0.215, 0.61, 0.355, 1)
     case .cubicInOut:
-      bezier = UnitBezier(0.645, 0.045, 0.355, 1)
+      timingFunction = UnitBezier(0.645, 0.045, 0.355, 1)
       
     case .quartIn:
-      bezier = UnitBezier(0.895, 0.03, 0.685, 0.22)
+      timingFunction = UnitBezier(0.895, 0.03, 0.685, 0.22)
     case .quartOut:
-      bezier = UnitBezier(0.165, 0.84, 0.44, 1)
+      timingFunction = UnitBezier(0.165, 0.84, 0.44, 1)
     case .quartInOut:
-      bezier = UnitBezier(0.77, 0, 0.175, 1)
+      timingFunction = UnitBezier(0.77, 0, 0.175, 1)
       
     case .quintIn:
-      bezier = UnitBezier(0.755, 0.05, 0.855, 0.06)
+      timingFunction = UnitBezier(0.755, 0.05, 0.855, 0.06)
     case .quintOut:
-      bezier = UnitBezier(0.23, 1, 0.32, 1)
+      timingFunction = UnitBezier(0.23, 1, 0.32, 1)
     case .quintInOut:
-      bezier = UnitBezier(0.86,0,0.07,1)
+      timingFunction = UnitBezier(0.86,0,0.07,1)
       
     case .expoIn:
-      bezier = UnitBezier(0.95, 0.05, 0.795, 0.035)
+      timingFunction = UnitBezier(0.95, 0.05, 0.795, 0.035)
     case .expoOut:
-      bezier = UnitBezier(0.19, 1, 0.22, 1)
+      timingFunction = UnitBezier(0.19, 1, 0.22, 1)
     case .expoInOut:
-      bezier = UnitBezier(1, 0, 0, 1)
+      timingFunction = UnitBezier(1, 0, 0, 1)
       
     case .circIn:
-      bezier = UnitBezier(0.6, 0.04, 0.98, 0.335)
+      timingFunction = UnitBezier(0.6, 0.04, 0.98, 0.335)
     case .circOut:
-      bezier = UnitBezier(0.075, 0.82, 0.165, 1)
+      timingFunction = UnitBezier(0.075, 0.82, 0.165, 1)
     case .circInOut:
-      bezier = UnitBezier(0.785, 0.135, 0.15, 0.86)
+      timingFunction = UnitBezier(0.785, 0.135, 0.15, 0.86)
       
     case .backIn:
-      bezier = UnitBezier(0.6, -0.28, 0.735, 0.045)
+      timingFunction = UnitBezier(0.6, -0.28, 0.735, 0.045)
     case .backOut:
-      bezier = UnitBezier(0.175, 0.885, 0.32, 1.275)
+      timingFunction = UnitBezier(0.175, 0.885, 0.32, 1.275)
     case .backInOut:
-      bezier = UnitBezier(0.68, -0.55, 0.265, 1.55)
+      timingFunction = UnitBezier(0.68, -0.55, 0.265, 1.55)
       
     case .curve(let p1x, let p1y, let p2x, let p2y):
-      bezier = UnitBezier(p1x, p1y, p2x, p2y)
+      timingFunction = UnitBezier(p1x, p1y, p2x, p2y)
+
+    case .spring(let dampingRatio, let initialVelocity):
+      self.dampingRatio = dampingRatio
+      self.initialVelocity = initialVelocity
+      self.timingFunction = UnitBezier(0.0, 0.0, 0.0, 0.0)
+
+    case .timingFunction(let f):
+      timingFunction = f
     }
   }
   
   public func solveForTime(_ x: Double) -> Double {
-    return bezier.solve(x)
+    return timingFunction.solveForTime(x)
   }
   
   public func inverseSolveForTime(_ x: Double) -> Double {
-    return bezier.inverseSolve(x)
+    return timingFunction.inverseSolveForTime(x)
   }
   
   public static let linear:Ease = { (t: CGFloat, b: CGFloat, c: CGFloat) -> CGFloat in
