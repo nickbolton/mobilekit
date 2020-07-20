@@ -4,11 +4,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "mobilekit",
+    name: "MobileKit",
     products: [
         // Products define the executables and libraries produced by a package, and make them visible to other packages.
         .library(
-            name: "mobilekit",
+            name: "MobileKit",
             targets: ["mobilekit"]),
     ],
     dependencies: [
