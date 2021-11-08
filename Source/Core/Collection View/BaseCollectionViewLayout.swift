@@ -87,6 +87,10 @@ open class BaseCollectionViewLayout: UICollectionViewLayout {
     }
     item.indexPath = indexPath
   }
+
+  open func sectionHeaderAttributes(at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+    nil
+  }
   
   open func enumerateCollectionItems(_ itemHandler: (IndexPath, UICollectionViewLayoutAttributes, CollectionItem)->Void) {
     guard let collectionView = collectionView else { return }
@@ -111,16 +115,20 @@ open class BaseCollectionViewLayout: UICollectionViewLayout {
     
     var newLayoutInfo = [String: Dictionary<IndexPath, UICollectionViewLayoutAttributes>]()
     var cellLayoutInfo = [IndexPath: UICollectionViewLayoutAttributes]()
-    //        var supplimentaryLayoutInfo = [IndexPath: UICollectionViewLayoutAttributes]()
+    var headerSupplementaryInfo = [IndexPath: UICollectionViewLayoutAttributes]()
     //        var decorationLayoutInfo = [IndexPath: UICollectionViewLayoutAttributes]()
     
     enumerateCollectionItems { (ip, attr, item) in
       var attributes = attr
+      if ip.item == 0, let attributes = sectionHeaderAttributes(at: ip) {
+        headerSupplementaryInfo[ip] = attributes
+      }
       configure(attributes: &attributes, with: item, at: ip)
       cellLayoutInfo[ip] = attributes
     }
     
     newLayoutInfo[collectionViewCellKind] = cellLayoutInfo
+    newLayoutInfo[UICollectionView.elementKindSectionHeader] = headerSupplementaryInfo
     //        newLayoutInfo[collectionViewSupplimentaryKind] = supplimentaryLayoutInfo
     //        newLayoutInfo[collectionViewDecorationKind] = decorationLayoutInfo
     
@@ -177,7 +185,7 @@ open class BaseCollectionViewLayout: UICollectionViewLayout {
     return nil
   }
   
-  public func layoutAttributesForSupplementaryView(of kind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+  open func layoutAttributesForSupplementaryView(of kind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
     if let layoutInfo = self.layoutInfo {
       if let dict = layoutInfo[kind] {
         return dict[indexPath]
@@ -186,7 +194,7 @@ open class BaseCollectionViewLayout: UICollectionViewLayout {
     return nil
   }
   
-  public func layoutAttributesForDecorationView(of kind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
+  open func layoutAttributesForDecorationView(of kind: String, at indexPath: IndexPath) -> UICollectionViewLayoutAttributes? {
     if let layoutInfo = self.layoutInfo {
       if let dict = layoutInfo[kind] {
         return dict[indexPath]

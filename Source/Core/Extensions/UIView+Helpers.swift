@@ -2,20 +2,25 @@
 //  View+Helpers.swift
 //  MobileKit
 //
-//  Created by Nick Bolton on 6/28/16.
-//  Copyright © 2016 Pixelbleed, LLC. All rights reserved.
+//  Copyright © 2020 Pixelbleed LLC All rights reserved.
 //
 
 import UIKit
 
 public extension UIView {
-    
-    var statusBarHeight: CGFloat { return UIApplication.shared.statusBarFrame.height }
 
-    var safeRegionInsets: UIEdgeInsets {
-        if #available(iOS 11, *) {
-            return safeAreaInsets
-        }
-        return .zero
-    }    
+  var statusBarHeight: CGFloat {
+    let defaultHeight = UIApplication.shared.statusBarFrame.height
+    if #available(iOS 13.0, *) {
+      return window?.windowScene?.statusBarManager?.statusBarFrame.height ?? defaultHeight
+    }
+    return defaultHeight
+  }
+  
+  var safeRegionInsets: UIEdgeInsets {
+    if #available(iOS 11, *) {
+      return safeAreaInsets
+    }
+    return .zero
+  }
 }

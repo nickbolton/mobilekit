@@ -21,6 +21,11 @@ open class NiblessNavigationController: UINavigationController {
     NotificationCenter.default.addObserver(self, selector: #selector(themeChanged), name: Notification.Name.ThemeChanged, object: ThemeManager.shared)
   }
 
+  public override init(rootViewController: UIViewController) {
+    super.init(rootViewController: rootViewController)
+    NotificationCenter.default.addObserver(self, selector: #selector(themeChanged), name: Notification.Name.ThemeChanged, object: ThemeManager.shared)
+  }
+
   deinit {
     NotificationCenter.default.removeObserver(self)
   }

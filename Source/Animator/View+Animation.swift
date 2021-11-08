@@ -7,9 +7,8 @@
 //
 import UIKit
 
-extension UIView {
-    
-    static public let defaultAnimationOptions = UIView.AnimationOptions.curveEaseInOut.union(.beginFromCurrentState).union(.allowAnimatedContent)
-    
-    static public let defaultTransitionOptions = UIView.AnimationOptions.curveEaseInOut.union(.beginFromCurrentState).union(.allowAnimatedContent).union(.transitionCrossDissolve)    
+extension UIView.AnimationOptions {
+  public static let defaultAnimationOptions = UIView.AnimationOptions.curveEaseInOut.union(.beginFromCurrentState).union(.allowAnimatedContent)
+
+  public static let defaultTransitionOptions = UIView.AnimationOptions.curveEaseInOut.union(.beginFromCurrentState).union(.allowAnimatedContent).union(.transitionCrossDissolve)
 }

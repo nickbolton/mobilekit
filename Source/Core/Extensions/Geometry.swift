@@ -1,6 +1,6 @@
 //
 //  Geometry.swift
-//  HappyPath
+//  MobileKit
 //
 //  Created by Nick Bolton on 12/9/18.
 //  Copyright © 2018 Pixelbleed LLC. All rights reserved.
@@ -10,10 +10,10 @@ import UIKit
 
 public extension CGFloat {
   
-  var pointAligned: CGFloat { return CGFloat(roundf(Float(self))) }
-  var halfPointAligned: CGFloat { return roundToPrecision(2.0) }
-  var halfPointFloor: CGFloat { return floorToPrecision(2.0) }
-  var halfPointCeil: CGFloat { return ceilToPrecision(2.0) }
+  var pointAligned: CGFloat { CGFloat(roundf(Float(self))) }
+  var halfPointAligned: CGFloat { roundToPrecision(2.0) }
+  var halfPointFloor: CGFloat { floorToPrecision(2.0) }
+  var halfPointCeil: CGFloat { ceilToPrecision(2.0) }
   
   var isWithinEpsilon: Bool {
     let epsilon: CGFloat = 0.000001
@@ -46,8 +46,8 @@ public extension CGFloat {
     return self
   }
   
-  func scale(by scale: CGFloat) -> CGFloat{
-    return self * scale
+  func scaled(by scale: CGFloat) -> CGFloat{
+    self * scale
   }
   
   func normalize(by scale: CGFloat) -> CGFloat{
@@ -64,53 +64,68 @@ public extension CGFloat {
 public extension CGPoint {
   
   func offset(by offset: CGFloat) -> CGPoint {
-    return CGPoint(x: x + offset, y: y + offset)
+    CGPoint(x: x + offset, y: y + offset)
   }
-  
+
+  func offset(by delta: CGVector) -> CGPoint {
+    offset(dx: delta.dx, dy: delta.dy)
+  }
+
+  func minusOffset(by delta: CGVector) -> CGPoint {
+    offset(dx: -delta.dx, dy: -delta.dy)
+  }
+
   func offset(dx: CGFloat, dy: CGFloat) -> CGPoint {
-    return CGPoint(x: x + dx, y: y + dy)
+    CGPoint(x: x + dx, y: y + dy)
   }
   
   var pointAligned: CGPoint {
-    return CGPoint(x: x.pointAligned, y: y.pointAligned)
+    CGPoint(x: x.pointAligned, y: y.pointAligned)
   }
   
   var halfPointAligned: CGPoint {
-    return CGPoint(x: x.halfPointAligned, y: y.halfPointAligned)
+    CGPoint(x: x.halfPointAligned, y: y.halfPointAligned)
   }
   
   func ceilToPrecision(_ precision: CGFloat) -> CGPoint {
-    return CGPoint(x: x.roundToPrecision(precision), y: y.roundToPrecision(precision))
+    CGPoint(x: x.roundToPrecision(precision), y: y.roundToPrecision(precision))
   }
   
   func roundToPrecision(_ precision: CGFloat) -> CGPoint {
-    return CGPoint(x: x.roundToPrecision(precision), y: y.roundToPrecision(precision))
+    CGPoint(x: x.roundToPrecision(precision), y: y.roundToPrecision(precision))
   }
   
-  func scale(by scale: CGFloat) -> CGPoint {
-    return CGPoint(x: x.scale(by: scale), y: y.scale(by: scale))
+  func scaled(by scale: CGFloat) -> CGPoint {
+    CGPoint(x: x.scaled(by: scale), y: y.scaled(by: scale))
   }
   
   func normalize(by scale: CGFloat) -> CGPoint {
-    return CGPoint(x: x.normalize(by: scale), y: y.normalize(by: scale))
+    CGPoint(x: x.normalize(by: scale), y: y.normalize(by: scale))
   }
   
   func pathPoint(inRect rect: CGRect) -> CGPoint {
-    return CGPoint(x: rect.minX + (x * rect.width), y: rect.minY + (y * rect.height))
+    CGPoint(x: rect.minX + (x * rect.width), y: rect.minY + (y * rect.height))
   }
   
   func pathPoint(inSize size: CGSize) -> CGPoint {
-    return pathPoint(inRect: CGRect(origin: .zero, size: size))
+    pathPoint(inRect: CGRect(origin: .zero, size: size))
+  }
+
+  func difference(from p: CGPoint) -> CGVector {
+    CGVector(dx: p.x - x, dy: p.y - y)
   }
   
   func distance(to p: CGPoint) -> CGFloat {
-    let dx = p.x - x
-    let dy = p.y - y
-    return sqrt(dx*dx + dy*dy)
+    let diff = difference(from: p)
+    return sqrt((diff.dx * diff.dx) + (diff.dy * diff.dy))
   }
   
   var truncatedSmallValue: CGPoint {
-    return CGPoint(x: x.truncatedSmallValue, y: y.truncatedSmallValue)
+    CGPoint(x: x.truncatedSmallValue, y: y.truncatedSmallValue)
+  }
+
+  func toVector() -> CGVector {
+    CGVector(dx: x, dy: y)
   }
 }
 
@@ -120,41 +135,54 @@ public extension CGSize {
     let epsilon: CGFloat = 0.1
     return CGSize(width: max(width, epsilon), height: max(height, epsilon))
   }
-
+  
   func offset(by offset: CGFloat) -> CGSize {
-    return CGSize(width: width + offset, height: height + offset)
+    CGSize(width: width + offset, height: height + offset)
   }
-
+  
   func offset(dx: CGFloat, dy: CGFloat) -> CGSize {
-    return CGSize(width: width + dx, height: height + dy)
+    CGSize(width: width + dx, height: height + dy)
   }
   
   var pointAligned: CGSize {
-    return CGSize(width: width.pointAligned, height: height.pointAligned)
+    CGSize(width: width.pointAligned, height: height.pointAligned)
   }
   
   var halfPointAligned: CGSize {
-    return CGSize(width: width.halfPointAligned, height: height.halfPointAligned)
+    CGSize(width: width.halfPointAligned, height: height.halfPointAligned)
   }
   
   var area: CGFloat {
-    return width * height
+    width * height
   }
   
   func ceilToPrecision(_ precision: CGFloat) -> CGSize {
-    return CGSize(width: width.roundToPrecision(precision), height: height.roundToPrecision(precision))
+    CGSize(width: width.roundToPrecision(precision), height: height.roundToPrecision(precision))
   }
   
   func roundToPrecision(_ precision: CGFloat) -> CGSize {
-    return CGSize(width: width.roundToPrecision(precision), height: height.roundToPrecision(precision))
+    CGSize(width: width.roundToPrecision(precision), height: height.roundToPrecision(precision))
   }
   
-  func scale(by scale: CGFloat) -> CGSize {
-    return CGSize(width: width.scale(by: scale), height: height.scale(by: scale))
+  func scaled(by scale: CGFloat) -> CGSize {
+    CGSize(width: width.scaled(by: scale), height: height.scaled(by: scale))
+  }
+
+  func clamped(minValue: CGSize? = nil, maxValue: CGSize? = nil) -> CGSize {
+    var result = self
+    if let min = minValue {
+      result.width = max(result.width, min.width)
+      result.height = max(result.height, min.height)
+    }
+    if let max = maxValue {
+      result.width = min(result.width, max.width)
+      result.height = min(result.height, max.height)
+    }
+    return result
   }
   
   func normalize(by scale: CGFloat) -> CGSize {
-    return CGSize(width: width.normalize(by: scale), height: height.normalize(by: scale))
+    CGSize(width: width.normalize(by: scale), height: height.normalize(by: scale))
   }
   
   func aspectScaled(to size: CGSize) -> CGSize {
@@ -163,53 +191,53 @@ public extension CGSize {
     if abs(size.width - width) > abs(size.height - height) {
       scaleFactor = size.width / width
     }
-    return scale(by: scaleFactor).halfPointAligned
+    return scaled(by: scaleFactor).halfPointAligned
   }
   
-  var rotated: CGSize { return CGSize(width: height, height: width) }
+  var rotated: CGSize { CGSize(width: height, height: width) }
   
   var truncatedSmallValue: CGSize {
-    return CGSize(width: width.truncatedSmallValue, height: height.truncatedSmallValue)
+    CGSize(width: width.truncatedSmallValue, height: height.truncatedSmallValue)
   }
 }
 
 public extension CGRect {
-
-  var center: CGPoint { return CGPoint(x: midX, y: midY) }
+  
+  var center: CGPoint { CGPoint(x: midX, y: midY) }
   
   var epsilonBoundSize: CGRect {
-    return CGRect(origin: origin, size: size.epsilonBoundSize)
+    CGRect(origin: origin, size: size.epsilonBoundSize)
   }
   
   var edgeInsets: UIEdgeInsets {
-    return UIEdgeInsets(top: minY,
-                        left: minX,
-                        bottom: maxY,
-                        right: maxX)
+    UIEdgeInsets(top: minY,
+                 left: minX,
+                 bottom: maxY,
+                 right: maxX)
   }
   
   var pointAligned: CGRect {
-    return CGRect(origin: origin.pointAligned, size: size.pointAligned)
+    CGRect(origin: origin.pointAligned, size: size.pointAligned)
   }
   
   var halfPointAligned: CGRect {
-    return CGRect(origin: origin.halfPointAligned, size: size.halfPointAligned)
+    CGRect(origin: origin.halfPointAligned, size: size.halfPointAligned)
   }
   
   func ceilToPrecision(_ precision: CGFloat) -> CGRect {
-    return CGRect(origin: origin.roundToPrecision(precision), size: size.roundToPrecision(precision))
+    CGRect(origin: origin.roundToPrecision(precision), size: size.roundToPrecision(precision))
   }
   
   func roundToPrecision(_ precision: CGFloat) -> CGRect {
-    return CGRect(origin: origin.roundToPrecision(precision), size: size.roundToPrecision(precision))
+    CGRect(origin: origin.roundToPrecision(precision), size: size.roundToPrecision(precision))
   }
   
-  func scale(by scale: CGFloat) -> CGRect {
-    return CGRect(origin: origin.scale(by: scale), size: size.scale(by: scale))
+  func scaled(by scale: CGFloat) -> CGRect {
+    CGRect(origin: origin.scaled(by: scale), size: size.scaled(by: scale))
   }
   
   func normalize(by scale: CGFloat) -> CGRect {
-    return CGRect(origin: origin.normalize(by: scale), size: size.normalize(by: scale))
+    CGRect(origin: origin.normalize(by: scale), size: size.normalize(by: scale))
   }
   
   var rotated: CGRect {
@@ -220,7 +248,7 @@ public extension CGRect {
                   height: width)
   }
   
-  private var smallSize: CGFloat { return 0.0001 }
+  private var smallSize: CGFloat { 0.0001 }
   
   func distance(to p: CGPoint) -> CGFloat {
     // first of all, we check if point is inside rect. If it is, distance is zero
@@ -251,7 +279,7 @@ public extension CGRect {
   }
   
   func distanceToClosetEdge(point p: CGPoint) -> CGFloat {
-    return min(distanceToClosetHorizontalEdge(point: p), distanceToClosetVerticalEdge(point: p))
+    min(distanceToClosetHorizontalEdge(point: p), distanceToClosetVerticalEdge(point: p))
   }
   
   func vector(to rect: CGRect) -> CGVector {
@@ -279,44 +307,72 @@ public extension CGRect {
   }
   
   var truncatedSmallValue: CGRect {
-    return CGRect(origin: origin.truncatedSmallValue, size: size.truncatedSmallValue)
+    CGRect(origin: origin.truncatedSmallValue, size: size.truncatedSmallValue)
   }
+
+  func expanded(by size: CGSize) -> CGRect {
+    CGRect(
+      x: minX - (size.width / 2.0),
+      y: minY - (size.height / 2.0),
+      width: width + size.width,
+      height: height + size.height
+    )
+  }
+
+  func expanded(by size: CGFloat) -> CGRect {
+    CGRect(
+      x: minX - (size / 2.0),
+      y: minY - (size / 2.0),
+      width: width + size,
+      height: height + size
+    )
+  }
+
+  var verticalSnappingValues: [CGFloat] { [minY, maxY] }
+  var horizontalSnappingValues: [CGFloat] { [minX, maxX] }
 }
 
 public extension UIEdgeInsets {
   
   var max: CGFloat {
-    return Swift.max(Swift.max(Swift.max(top, bottom), left), right)
+    Swift.max(Swift.max(Swift.max(top, bottom), left), right)
   }
   
   var cgRect: CGRect {
-    return CGRect(x: left,
-                  y: top,
-                  width: right - left,
-                  height: bottom - top)
+    CGRect(x: left,
+           y: top,
+           width: right - left,
+           height: bottom - top)
   }
   
-  func scale(by scale: CGFloat) -> UIEdgeInsets {
-    return UIEdgeInsets(top: top.scale(by: scale),
-                        left: left.scale(by: scale),
-                        bottom: bottom.scale(by: scale),
-                        right: right.scale(by: scale))
+  func scaled(by scale: CGFloat) -> UIEdgeInsets {
+    UIEdgeInsets(
+      top: top.scaled(by: scale),
+      left: left.scaled(by: scale),
+      bottom: bottom.scaled(by: scale),
+      right: right.scaled(by: scale)
+    )
   }
   
   func normalize(by scale: CGFloat) -> UIEdgeInsets {
-    return UIEdgeInsets(top: top.normalize(by: scale),
-                        left: left.normalize(by: scale),
-                        bottom: bottom.normalize(by: scale),
-                        right: right.normalize(by: scale))
+    UIEdgeInsets(
+      top: top.normalize(by: scale),
+      left: left.normalize(by: scale),
+      bottom: bottom.normalize(by: scale),
+      right: right.normalize(by: scale)
+    )
   }
 }
 
 public extension CGVector {
-  func scale(by scale: CGFloat) -> CGVector {
-    return CGVector(dx: dx.scale(by: scale), dy: dy.scale(by: scale))
+
+  func toPoint() -> CGPoint { CGPoint(x: dx, y: dy) }
+  
+  func scaled(by scale: CGFloat) -> CGVector {
+    CGVector(dx: dx.scaled(by: scale), dy: dy.scaled(by: scale))
   }
   
   var truncatedSmallValue: CGVector {
-    return CGVector(dx: dx.truncatedSmallValue, dy: dy.truncatedSmallValue)
+    CGVector(dx: dx.truncatedSmallValue, dy: dy.truncatedSmallValue)
   }
 }

@@ -23,11 +23,39 @@ public struct Interpolate {
   static public func value(start: CGFloat, end: CGFloat, progress: Double) -> CGFloat {
     return start * CGFloat(1.0 - progress) + end * CGFloat(progress)
   }
-  
+
+  static public func value(start: Float, end: Float, progress: Double) -> Float {
+    return start * Float(1.0 - progress) + end * Float(progress)
+  }
+
   static public func value(start: Int, end: Int, progress: Double) -> Int {
     return Int(round(Float(start) * Float(1.0 - progress) + Float(end) * Float(progress)))
   }
-  
+
+  static public func value(start: UInt8, end: UInt8, progress: Double) -> UInt8 {
+    return UInt8(round(Float(start) * Float(1.0 - progress) + Float(end) * Float(progress)))
+  }
+
+  static public func value(start: UInt16, end: UInt16, progress: Double) -> UInt16 {
+    return UInt16(round(Float(start) * Float(1.0 - progress) + Float(end) * Float(progress)))
+  }
+
+  static public func value(start: UInt32, end: UInt32, progress: Double) -> UInt32 {
+    return UInt32(round(Float(start) * Float(1.0 - progress) + Float(end) * Float(progress)))
+  }
+
+  static public func value(start: Int8, end: Int8, progress: Double) -> Int8 {
+    return Int8(round(Float(start) * Float(1.0 - progress) + Float(end) * Float(progress)))
+  }
+
+  static public func value(start: Int16, end: Int16, progress: Double) -> Int16 {
+    return Int16(round(Float(start) * Float(1.0 - progress) + Float(end) * Float(progress)))
+  }
+
+  static public func value(start: Int32, end: Int32, progress: Double) -> Int32 {
+    return Int32(round(Float(start) * Float(1.0 - progress) + Float(end) * Float(progress)))
+  }
+
   static public func value(start: CGPoint, end: CGPoint, progress: Double) -> CGPoint {
     let x = value(start: start.x, end: end.x, progress: progress)
     let y = value(start: start.y, end: end.y, progress: progress)

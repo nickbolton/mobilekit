@@ -2,8 +2,7 @@
 //  View+Layout.swift
 //  MobileKit
 //
-//  Created by Nick Bolton on 6/28/16.
-//  Copyright © 2016 Pixelbleed, LLC. All rights reserved.
+//  Copyright © 2020 Pixelbleed LLC All rights reserved.
 //
 
 import UIKit
@@ -13,7 +12,7 @@ public extension UIView {
   func constraint(with attribute: NSLayoutConstraint.Attribute) -> NSLayoutConstraint? {
     for constraint in constraints {
       if (attribute == constraint.firstAttribute && constraint.firstItem as! NSObject == self) ||
-        (attribute == constraint.secondAttribute && constraint.secondItem as! NSObject == self) {
+          (attribute == constraint.secondAttribute && constraint.secondItem as! NSObject == self) {
         return constraint
       }
     }
@@ -24,7 +23,7 @@ public extension UIView {
     var result = [NSLayoutConstraint]()
     for constraint in constraints {
       if (attribute == constraint.firstAttribute && constraint.firstItem as! NSObject == self) ||
-        (attribute == constraint.secondAttribute && constraint.secondItem as! NSObject == self) {
+          (attribute == constraint.secondAttribute && constraint.secondItem as! NSObject == self) {
         result.append(constraint)
       }
     }
@@ -156,10 +155,21 @@ public extension UIView {
     let heightConstraint = layout(height: size.height, relatedBy: relatedBy, priority: priority)
     result.append(widthConstraint)
     result.append(heightConstraint)
-    
+
     return result
   }
-  
+
+  @discardableResult
+  func layout(size:CGFloat, relatedBy: NSLayoutConstraint.Relation = .equal, priority: UILayoutPriority = .required) -> [NSLayoutConstraint] {
+    var result = Array<NSLayoutConstraint>()
+    let widthConstraint = layout(width: size, relatedBy: relatedBy, priority: priority)
+    let heightConstraint = layout(height: size, relatedBy: relatedBy, priority: priority)
+    result.append(widthConstraint)
+    result.append(heightConstraint)
+
+    return result
+  }
+
   @discardableResult
   func centerView(relatedBy: NSLayoutConstraint.Relation = .equal, priority: UILayoutPriority = .required) -> [NSLayoutConstraint] {
     var result = Array<NSLayoutConstraint>()
@@ -310,8 +320,11 @@ public extension UIView {
   
   @discardableResult
   func expandToSafeArea(insets:UIEdgeInsets = .zero, priority: UILayoutPriority = .required) -> [NSLayoutConstraint] {
+    guard let safeAreaLayoutGuide = superview?.safeAreaLayoutGuide else {
+      fatalError("No superview")
+    }
     translatesAutoresizingMaskIntoConstraints = false
-
+    
     let leftConstraint = leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: insets.left)
     let rightConstraint = rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: -insets.right)
     let topConstraint = topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: insets.top)
@@ -457,6 +470,9 @@ public extension UIView {
   
   @discardableResult
   func alignSafeAreaTop(offset: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+    guard let safeAreaLayoutGuide = superview?.safeAreaLayoutGuide else {
+      fatalError("No superview")
+    }
     translatesAutoresizingMaskIntoConstraints = false
     let result = topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: offset)
     result.priority = priority
@@ -482,6 +498,9 @@ public extension UIView {
   
   @discardableResult
   func alignSafeAreaBottom(offset: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+    guard let safeAreaLayoutGuide = superview?.safeAreaLayoutGuide else {
+      fatalError("No superview")
+    }
     translatesAutoresizingMaskIntoConstraints = false
     let result = bottomAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: offset)
     result.priority = priority
@@ -507,6 +526,9 @@ public extension UIView {
   
   @discardableResult
   func alignSafeAreaBaseline(offset: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+    guard let safeAreaLayoutGuide = superview?.safeAreaLayoutGuide else {
+      fatalError("No superview")
+    }
     translatesAutoresizingMaskIntoConstraints = false
     let result = lastBaselineAnchor.constraint(equalTo: safeAreaLayoutGuide.bottomAnchor, constant: offset)
     result.priority = priority
@@ -532,6 +554,9 @@ public extension UIView {
   
   @discardableResult
   func alignSafeAreaLeading(offset: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+    guard let safeAreaLayoutGuide = superview?.safeAreaLayoutGuide else {
+      fatalError("No superview")
+    }
     translatesAutoresizingMaskIntoConstraints = false
     let result = leadingAnchor.constraint(equalTo: safeAreaLayoutGuide.leadingAnchor, constant: offset)
     result.priority = priority
@@ -605,6 +630,9 @@ public extension UIView {
   
   @discardableResult
   func alignSafeAreaTrailing(offset: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+    guard let safeAreaLayoutGuide = superview?.safeAreaLayoutGuide else {
+      fatalError("No superview")
+    }
     translatesAutoresizingMaskIntoConstraints = false
     let result = trailingAnchor.constraint(equalTo: safeAreaLayoutGuide.trailingAnchor, constant: offset)
     result.priority = priority
@@ -678,6 +706,9 @@ public extension UIView {
   
   @discardableResult
   func alignSafeAreaLeft(offset: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+    guard let safeAreaLayoutGuide = superview?.safeAreaLayoutGuide else {
+      fatalError("No superview")
+    }
     translatesAutoresizingMaskIntoConstraints = false
     let result = leftAnchor.constraint(equalTo: safeAreaLayoutGuide.leftAnchor, constant: offset)
     result.priority = priority
@@ -703,6 +734,9 @@ public extension UIView {
   
   @discardableResult
   func alignSafeAreaRight(offset: CGFloat = 0.0, priority: UILayoutPriority = .required) -> NSLayoutConstraint {
+    guard let safeAreaLayoutGuide = superview?.safeAreaLayoutGuide else {
+      fatalError("No superview")
+    }
     translatesAutoresizingMaskIntoConstraints = false
     let result = rightAnchor.constraint(equalTo: safeAreaLayoutGuide.rightAnchor, constant: offset)
     result.priority = priority

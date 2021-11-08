@@ -2,8 +2,7 @@
 //  UIColor+Utils.swift
 //  MobileKit
 //
-//  Created by Nick Bolton on 7/25/16.
-//  Copyright © 2016 Pixelbleed LLC. All rights reserved.
+//  Copyright © 2020 Pixelbleed LLC All rights reserved.
 //
 
 import UIKit
@@ -20,7 +19,28 @@ extension UIColor {
     }
     return 0.0
   }
-  
+
+  public var hex: Int32 {
+    let (red, green, blue, _) = rbga
+    return (Int32(red * 255.0) << 16) | (Int32(green * 255.0) << 8) | Int32(blue * 255.0)
+  }
+
+  public var rbga: (red: CGFloat, green: CGFloat, blue: CGFloat, alpha: CGFloat) {
+    var red: CGFloat = 0.0
+    var green: CGFloat = 0.0
+    var blue: CGFloat = 0.0
+    var alpha: CGFloat = 0.0
+    var white: CGFloat = 0.0
+
+    if getRed(&red, green: &green, blue: &blue, alpha: &alpha) {
+      return (red, green, blue, alpha)
+    }
+    if getWhite(&white, alpha: &alpha) {
+      return (white, white, white, alpha)
+    }
+    return (0.0, 0.0, 0.0, 0.0)
+  }
+
   public var hexString: String {
     var red: CGFloat = 0.0
     var green: CGFloat = 0.0
@@ -107,9 +127,9 @@ extension UIColor {
     let range = from.index(from.startIndex, offsetBy: start)..<from.index(from.startIndex, offsetBy: start+length)
     let substring = String(from[range])
     let fullHex = length == 2 ? substring : "\(substring)\(substring)"
-    var hexComponent: UInt32 = 0
+    var hexComponent: UInt64 = 0
     let scanner = Scanner(string: fullHex)
-    scanner.scanHexInt32(&hexComponent)
+    scanner.scanHexInt64(&hexComponent)
     return CGFloat(hexComponent) / CGFloat(255.0)
   }
   
@@ -122,7 +142,7 @@ extension UIColor {
     
     return UIColor(red: red, green: green, blue: blue, alpha: alpha)
   }
-    
+  
   static public func random() -> UIColor {
     let red =  CGFloat(UInt32.random(start: 0, end: 255))/CGFloat(255.0)
     let blue =  CGFloat(UInt32.random(start: 0, end: 255))/CGFloat(255.0)

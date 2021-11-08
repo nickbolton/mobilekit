@@ -14,6 +14,15 @@ open class NiblessTabBarController: UITabBarController {
   private(set) public var appearanceCount = 0
   private(set) public var hasAppeared = false
   private(set) public var isAppearing = false
+
+  public var currentViewController: UIViewController? {
+    guard
+      let viewControllers = viewControllers,
+      selectedIndex >= 0,
+      selectedIndex < viewControllers.count
+    else { return nil }
+    return viewControllers[selectedIndex]
+  }
   
   public var appContext = AppContext.shared
   

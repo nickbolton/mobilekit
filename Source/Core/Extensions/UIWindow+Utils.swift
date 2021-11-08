@@ -2,12 +2,14 @@
 //  UIWindow+Utils.swift
 //  MobileKit
 //
-//  Created by Nick Bolton on 12/24/19.
+//  Copyright © 2020 Pixelbleed LLC All rights reserved.
 //
 
 import UIKit
 
 public extension UIWindow {
+  
+  static var currentWindow: UIWindow { UIApplication.shared.windows.filter { $0.isKeyWindow }.first! }
   
   static var topWindowLevel: UIWindow.Level { topWindow.windowLevel }
   

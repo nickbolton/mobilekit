@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.license      = 'MIT'
   s.authors = { 'Nick Bolton' => 'nick@pixeol.com' }
 
-  s.ios.deployment_target = '11.0'
+  s.ios.deployment_target = '13.0'
   s.source = { :git => 'https://github.com/nickbolton/mobilekit.git', :branch => 'master' }
 
   s.subspec 'Core' do |s|

@@ -2,8 +2,7 @@
 //  ThemeManager.swift
 //  MobileKit
 //
-//  Created by Nick Bolton on 10/29/17.
-//  Copyright © 2017 Pixelbleed LLC. All rights reserved.
+//  Copyright © 2019 Pixelbleed, LLC. All rights reserved.
 //
 
 import UIKit
@@ -46,7 +45,7 @@ open class DefaultTheme: Theme {
   public var statusBarStyle: UIStatusBarStyle = .default
   public var keyboardAppearance: UIKeyboardAppearance = .light
   public var blurEffectStyle = UIBlurEffect.Style.light
-
+  
   public var headlineFont: UIFont { return UIFont.boldSystemFont(ofSize: scaledValue(22.0)) }
   public var bodyFont: UIFont { return UIFont.systemFont(ofSize: scaledValue(16.0)) }
   
@@ -94,14 +93,14 @@ public class ThemeManager: NSObject {
   
   private (set) var themes = [String: Theme]()
   private (set) public var selectedIdentifier: String = ""
-
-  private var lightTheme = DefaultLightTheme()
-  private var darkTheme = DefaultDarkTheme()
+  
+  private var lightTheme: Theme = DefaultLightTheme()
+  private var darkTheme: Theme = DefaultDarkTheme()
   
   public func currentTheme() -> Theme {
     return themes[selectedIdentifier] ?? DefaultLightTheme()
   }
-
+  
   public func initialize() {
     if #available(iOS 13.0, *) {
       if UITraitCollection.current.userInterfaceStyle == .dark {
@@ -113,15 +112,15 @@ public class ThemeManager: NSObject {
       selectLightTheme()
     }
   }
-
+  
   public func selectDarkTheme() {
     select(theme: darkTheme)
   }
-
+  
   public func selectLightTheme() {
     select(theme: lightTheme)
   }
-
+  
   var contentSizeCategory: UIContentSizeCategory = UIContentSizeCategory.large {
     didSet {
       var scale = 0
@@ -174,18 +173,28 @@ public class ThemeManager: NSObject {
       }
     }
   }
-  
+
+  public func registerLightTheme(_ theme: Theme) {
+    lightTheme = theme
+    registerTheme(theme)
+  }
+
+  public func registerDarkTheme(_ theme: Theme) {
+    darkTheme = theme
+    registerTheme(theme)
+  }
+
   public func registerTheme(_ theme: Theme) {
     themes[theme.identifier] = theme
     if selectedIdentifier.count <= 0 {
       selectTheme(withIdentifier: theme.identifier)
     }
   }
-
+  
   public func select(theme: Theme) {
     selectTheme(withIdentifier: theme.identifier)
   }
-
+  
   public func fireThemeChangedNotification() {
     NotificationCenter.default.post(name: Notification.Name.ThemeChanged, object: self)
   }

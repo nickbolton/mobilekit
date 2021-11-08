@@ -1,9 +1,9 @@
 //
 //  String+Utils.swift
-//  MobileKit
+//  ShowTime
 //
 //  Created by Nick Bolton on 8/17/16.
-//  Copyright © 2016 Pixelbleed LLC. All rights reserved.
+//  Copyright © 2020 Pixelbleed LLC. All rights reserved.
 //
 import UIKit
 
@@ -24,6 +24,26 @@ private let characterEntities : [ String : Character ] = [
 extension String {
   public var trimmed: String { return trimmingCharacters(in: CharacterSet.whitespacesAndNewlines) }
   public var length: Int { return count }
+
+  public var properName: String {
+    guard count > 0 else { return self }
+    guard count > 1 else { return uppercased() }
+
+    func mapFunc(_ substr: Substring) -> String {
+      let string = String(substr)
+      guard string.count > 1 else {
+        return string.uppercased()
+      }
+      return "\(String(string[string.startIndex]).uppercased())\(String(string.substring(from: 1)).lowercased())"
+    }
+    return split(separator: " ").map(mapFunc).joined(separator: " ").split(separator: "-").map(mapFunc).joined(separator: "-")
+  }
+
+  public var wordCount: Int {
+    let chararacterSet = CharacterSet.whitespacesAndNewlines.union(.punctuationCharacters)
+    let components = components(separatedBy: chararacterSet)
+    return components.filter({ !$0.isEmpty }).count
+  }
   
   public func textSize(using font: UIFont, withBounds: CGSize = CGSize(width: CGFloat(MAXFLOAT), height: CGFloat(MAXFLOAT))) -> CGSize {
     
@@ -49,7 +69,7 @@ extension String {
     //    decodeNumeric("20ac", 16) --> "€"
     func decodeNumeric(_ string : String, base : Int) -> Character? {
       guard let code = UInt32(string, radix: base),
-        let uniScalar = UnicodeScalar(code) else { return nil }
+            let uniScalar = UnicodeScalar(code) else { return nil }
       return Character(uniScalar)
     }
     
@@ -60,11 +80,10 @@ extension String {
     //     decode("&lt;")     --> "<"
     //     decode("&foo;")    --> nil
     func decode(_ entity : String) -> Character? {
-      
       if entity.hasPrefix("&#x") || entity.hasPrefix("&#X"){
-        return decodeNumeric(entity.substring(with: entity.index(entity.startIndex, offsetBy: 3) ..< entity.index(entity.endIndex, offsetBy: -1)), base: 16)
+        return decodeNumeric(entity.substring(from: 3), base: 16)
       } else if entity.hasPrefix("&#") {
-        return decodeNumeric(entity.substring(with: entity.index(entity.startIndex, offsetBy: 2) ..< entity.index(entity.endIndex, offsetBy: -1)), base: 10)
+        return decodeNumeric(entity.substring(from: 2), base: 10)
       } else {
         return characterEntities[entity]
       }
@@ -114,5 +133,25 @@ extension String {
     let regEx = "((https|http)://)?((\\w|-)+)(([.]|[/])((\\w|-)+))+"
     let predicate = NSPredicate(format:"SELF MATCHES %@", argumentArray:[regEx])
     return predicate.evaluate(with: self)
-  }  
+  }
+
+  func index(from: Int) -> Index {
+    return self.index(startIndex, offsetBy: from)
+  }
+
+  func substring(from: Int) -> String {
+    let fromIndex = index(from: from)
+    return String(self[fromIndex...])
+  }
+
+  func substring(to: Int) -> String {
+    let toIndex = index(from: to)
+    return String(self[..<toIndex])
+  }
+
+  func substring(with r: Range<Int>) -> String {
+    let startIndex = index(from: r.lowerBound)
+    let endIndex = index(from: r.upperBound)
+    return String(self[startIndex..<endIndex])
+  }
 }
